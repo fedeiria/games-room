@@ -1,0 +1,62 @@
+.bg-dark {
+    --bs-bg-opacity: 1;
+    background-color: rgba(33, 34, 51, 0.9) !important;
+}
+
+.btn-primary {
+    margin-top: 25px;
+    font-weight: 200;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border-color: rgba(33, 37, 41, 1);
+    background-color: rgb(27, 79, 131);
+}
+
+.card {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.container {
+    padding: 10px;
+    margin-top: 25px;
+    margin-bottom: -5px;
+}
+
+.form-group label {
+    color: grey;
+    font-weight: 200;
+    text-transform: uppercase;
+}
+
+.help-block.with-errors {
+    color: #ff5050;
+    margin-top: 5px;
+}
+
+h1 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+label {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    padding-top: 5px;
+}
+
+.row h3 {
+    color: whitesmoke;
+    text-align: center;
+    margin-top: -50px;
+}
+
+.row h5 {
+    color: rgb(182, 178, 178);
+    text-align: center;
+    font-weight: lighter;
+}
+
+.span-required {
+    color: hsl(359 calc( 1 * 87.3%) 59.8% / 1);
+}

@@ -1,0 +1,72 @@
+<div class="container" [ngStyle]="{ 'pointer-events': loading ? 'none' : 'auto' }">
+
+    <!-- spinner -->
+    @if (loading) {
+        <app-spinner />
+    }
+    
+    <!-- inert attribute disable interaction with the form while the spinner is active -->
+    <div [attr.inert]="loading ? '' : null">
+        <div class="row">
+            <div class="col-lg-7 mx-auto">
+                <div class="card mt-2 mx-auto p-4 bg-dark">
+                    <div class="card-body">
+                        <div class="container">
+                            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" id="contact-form" role="form" [attr.aria-disabled]="loading ? 'true' : null">
+                                <div class="row">
+                                    <h3>!Hola de nuevo!</h3>
+                                    <h5>!Nos alegramos de volver a verte!</h5>
+
+                                    <!-- email -->
+                                    <div class="form-group">
+                                        <label for="form-email">Correo Electronico</label>
+                                        <input type="email" class="form-control" formControlName="email" id="form-email" name="email" placeholder="Ingresa tu correo electronico" required aria-required="true" maxlength="55" autocomplete="email">
+                                        @if (email.invalid && (email.dirty || email.touched)) {
+                                            <div class="alert alert-danger mt-2">
+                                                @if (email.hasError('required')) {
+                                                    <span>Completa el campo con tu correo electronico</span>
+                                                }
+                                                @if (email.hasError('pattern')) {
+                                                    <span>Correo electronico invalido</span>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <!-- password -->
+                                    <div class="form-group">
+                                        <label for="form-password">Contraseña</label>
+                                        <input type="password" class="form-control" formControlName="password" id="form-password" name="password" placeholder="Ingresa tu contraseña" required aria-required="true" maxlength="35">
+                                        @if (password.invalid && (password.dirty || password.touched)) {
+                                            <div class="alert alert-danger mt-2">
+                                                @if (password.hasError('required')) {
+                                                    <span>Completa el campo con tu contraseña</span>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="forgot-password">
+                                    <a routerLink="/recover-password" routerLinkActive="active">
+                                        <label for="forgot-password">Olvide mi contraseña</label>
+                                    </a>
+                                </div>
+                                <div class="row">
+                                    <div class="d-grid gap-2">
+                                        <input type="submit" class="btn btn-primary" value="Ingresar" [disabled]="loginForm.invalid || loading">
+                                    </div>
+                                </div>
+                                <div class="user-register">
+                                    <span>¿No tenes una cuenta?</span>
+                                    <a routerLink="/register" routerLinkActive="active">
+                                        <label for="user-register">Registrate aca</label>
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
