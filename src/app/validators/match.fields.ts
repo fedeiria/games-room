@@ -1,4 +1,4 @@
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
 
 export function matchFields(sourceKey: string, confirmKey: string): ValidatorFn {
     const errorKey: string = 'fieldsMismatch';

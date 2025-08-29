@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-    // rutas publicas
+    // public routes
     {
         path: '',
         pathMatch: 'full',
@@ -21,5 +21,12 @@ export const routes: Routes = [
         path: 'about',
         title: 'Acerca de',
         loadComponent: () => import('./components/about/about').then(c => c.About)
+    },
+
+    // page not found (404)
+    {
+        path: '**',
+        title: 'Pagina no encontrada',
+        loadComponent: () => import('./components/page-not-found/page-not-found').then(c => c.PageNotFound)
     }
 ];
