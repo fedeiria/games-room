@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Spinner } from "../../shared/spinner/spinner";
 import { EMAIL_REGEX } from '../../../validators/email.regex';
-import { Authentication } from '../../../services/auth/authentication';
+import { Auth } from '../../../services/supabase/auth/auth';
+import { Database } from '../../../services/supabase/database/database';
+import { Dialogs } from '../../../services/messages/dialogs';
 
 @Component({
   selector: 'app-login',
@@ -17,11 +19,11 @@ export class Login {
 
   protected loading: boolean = false;
 
-  constructor(private authentication: Authentication) { }
+  constructor(private auth: Auth, private database: Database, private dialog: Dialogs, private router: Router) { }
   
-  loginForm = new FormGroup({
-    'email': new FormControl('', [Validators.pattern(EMAIL_REGEX), Validators.required]),
-    'password': new FormControl('', Validators.required)
+  loginForm = new FormGroup<{ email: FormControl<string | null>; password: FormControl<string | null>; }>({
+    email: new FormControl('', [Validators.pattern(EMAIL_REGEX), Validators.required]),
+    password: new FormControl('', Validators.required)
   });
 
   // GETTERS
@@ -34,71 +36,42 @@ export class Login {
   }
 
   async onSubmit() {
+    // muestro el spinner
+    this.loading = true;
+    
     try {
-      this.loading = true;
-      const userCredential = await this.authentication.login(this.email.value, this.password.value);
+      // llamo al servicio para corroborar el login del usuario
+      const { data, error } = await this.auth.signInWithEmailAndPassword(this.email.value, this.password.value);
       
       // si el usuario esta registrado...
-      if (userCredential) {
+      if (data.user) {
         
-        // obtengo su token
-        const user = userCredential.user;
-        const userToken = await user.getIdToken();
-
-        // busco en firestore y traigo sus datos
-        const querySnapshot = await this.firestoreService.getUser(this.email.value);
-
-        //copio los datos a un objeto
-        const document = querySnapshot.docs[0]; 
-        const userEnabled = document.get('enabled');
-
-        if (userEnabled) {
-          const userData = {
-            name: document.get('name'),
-            surname: document.get('surname'),
-            email: document.get('email'),
-            roleId: document.get('roleId'),
-            enabled: document.get('enabled')
-          }
-          // guardo en localStorage el profile del usuario y su token
-          this.localStorageService.setUserData(userData);
-          this.localStorageService.setUserToken(userToken);
-
-          // guardo en firestore el timestamp del login y redirijo al home
-          this.firestoreService.saveLoginTimestamp(this.email.value);
-          this.router.navigate(['/home']);
-        }
-        else {
-          // muestro mensaje de error
-          this.loading = false;
-          this.dialogService.showDialogMessage({
-            title: "Games Room",
-            content: "Usuario deshabilitado. Comunicate con nuestro soporte: support@games-room.com."
-          });
-        }
+        // busco en supabase y traigo sus datos
+        const querySnapshot = await this.database.getUserData(this.email.value);
+        
+        // guardo el timestamp del login en supabase y redirijo al home
+        this.database.saveLoginTimestamp(this.email.value);
+        this.router.navigate(['/home']);
+      }
+      else {
+        //muestro error para debug
+        console.log('error:', error);
+        
+        // muestro mensaje de error al usuario
+        this.dialog.showDialogMessage({
+          title: 'Games Room',
+          content: 'Error de Usuario / Contrasena. Verifica tus datos.'
+        });
       }
     }
     catch (error: any) {
-      //oculto el spinner
-      this.loading = false;
-
-      // error para debugging
+      // error para debug
       console.log('Login error: ', error);
 
       let message = 'Ocurrio un error inesperado.';
-
-      switch (error.code) {
-        case 'auth/invalid-credential':
-          message = 'Credenciales incorrectas.';
-          break;
-        case 'auth/network-request-failed':
-          message = 'Error de red. Por favor verifica tu conexion a Internet.';
-          break;
-        default:
-          message = error.message || message;
-      }
+      message = error.message || message;
       
-      this.dialogService.showDialogMessage({
+      this.dialog.showDialogMessage({
         title: 'Games Room',
         content: `${message}`
       });

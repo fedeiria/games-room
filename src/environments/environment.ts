@@ -10,6 +10,6 @@ export const environment = {
     },
     supabaseConfig: {
         supabaseUrl: 'https://kohjyhdphpowxqpknyiy.supabase.co',
-        supabaseKey: 'process.env.sb_publishable_2GehJ9TukhewAuHQHc6ugw_lAOdTYbK'
+        supabaseKey: 'sb_publishable_2GehJ9TukhewAuHQHc6ugw_lAOdTYbK'
     }
 };

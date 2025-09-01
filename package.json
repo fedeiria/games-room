@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy": "ng build && firebase deploy --only hosting"
   },
   "prettier": {
     "printWidth": 100,
@@ -22,11 +23,13 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/cdk": "^20.2.1",
     "@angular/common": "^20.2.2",
     "@angular/compiler": "^20.2.2",
     "@angular/core": "^20.2.2",
     "@angular/fire": "^20.0.1",
     "@angular/forms": "^20.2.2",
+    "@angular/material": "^20.2.1",
     "@angular/platform-browser": "^20.2.2",
     "@angular/router": "^20.2.2",
     "@ng-bootstrap/ng-bootstrap": "^19.0.1",

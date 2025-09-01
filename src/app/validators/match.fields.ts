@@ -8,11 +8,12 @@ export function matchFields(sourceKey: string, confirmKey: string): ValidatorFn 
         const sourceField = formGroup.get(sourceKey);
         const confirmField = formGroup.get(confirmKey);
 
+        // si alguno de los campos no existe, no se hace nada (no hay error)
         if (!sourceField || !confirmField) {
             return null;
         }
 
         const isMatch = sourceField.value === confirmField.value;
-        return isMatch ? null : { [errorKey]: { sourceKey, confirmKey } };
+        return isMatch ? null : { [errorKey] : { sourceKey, confirmKey } };
     }
 }

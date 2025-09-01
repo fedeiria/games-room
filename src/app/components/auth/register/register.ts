@@ -2,11 +2,15 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
+import { Router } from '@angular/router';
 import { Spinner } from "../../shared/spinner/spinner";
-import { Iuser } from '../../../interfaces/user/iuser';
+import { IUser } from '../../../interfaces/user/iuser';
 import { UserRole } from '../../../enums/user-role.enum';
 import { EMAIL_REGEX } from '../../../validators/email.regex';
 import { matchFields } from '../../../validators/match.fields';
+import { Dialogs } from '../../../services/messages/dialogs';
+import { Auth } from '../../../services/supabase/auth/auth';
+import { Database } from '../../../services/supabase/database/database';
 
 @Component({
   selector: 'app-register',
@@ -19,11 +23,11 @@ export class Register implements OnInit {
   protected loading: boolean = false;
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
-  newUser: Iuser = {
-    email: '',
+  newUser: IUser = {
+    id: '',
     name: '',
     surname: '',
-    enabled: false,
+    email: '',
     roleId: UserRole.User
   }
 
@@ -35,7 +39,9 @@ export class Register implements OnInit {
     repeatPassword: FormControl<string>;
   }>;
 
-  ngOnInit() {
+  constructor(private auth: Auth, private database: Database, private dialog: Dialogs, private router: Router) { }
+
+  ngOnInit(): void {
     this.registerForm = this.formBuilder.group(
       {
         email: this.formBuilder.control('', {
@@ -87,7 +93,72 @@ export class Register implements OnInit {
     return this.registerForm.controls.repeatPassword;
   }
 
-  onSubmit(): void {
-    // build
+  async onSubmit() {
+    // muestro el spinner
+    this.loading = true;
+
+    try {
+      // llamo al servicio para registrar al nuevo usuario
+      const { data, error } = await this.auth.signUpNewUser(this.email.value, this.password.value);
+
+      // si el usuario no existe...
+      if (data.user) {
+        console.log('valor: ', data);
+
+        // guardo los datos del formulario en el objeto
+        this.newUser = {
+          id: data.user.id,
+          name: this.name.value,
+          surname: this.surname.value,
+          email: this.email.value,
+          roleId: UserRole.User
+        }
+
+        // guardo los datos del usuario
+        this.database.saveNewUser(this.newUser);
+
+        // guardo la fecha de login del usuario
+        this.database.saveLoginTimestamp(this.newUser.email);
+
+        // ejecuto un delay y redirijo al home
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        this.router.navigate(['/home']);
+
+        /* setTimeout(() => {
+          this.router.navigate(['/home']);
+        }, 2000); */
+
+        // muestro mensaje exitoso
+        this.dialog.showDialogMessage({
+          title: 'Games Room',
+          content: 'Usuario registrado con exito.'
+        });
+      }
+      else {
+        //muestro error para debug
+        console.log('error:', error);
+        
+        // muestro mensaje de error al usuario
+        this.dialog.showDialogMessage({
+          title: 'Games Room',
+          content: 'Ya existe un usuario registrado con el correo: ' + this.email.value
+        });
+      }
+    }
+    catch (error: any) {
+      // error para debug
+      console.log('Registration error: ', error);
+
+      let message = 'Error inesperado durante el registro.';
+      message = error.message || message;
+
+      this.dialog.showDialogMessage({
+        title: 'Games Room',
+        content: `Ocurrio un error al registrar el usuario: ${message}`
+      });
+    }
+    finally {
+      this.loading = false;
+    }
   }
 }

@@ -18,6 +18,11 @@ export const routes: Routes = [
         loadComponent: () => import('./components/auth/register/register').then(c => c.Register)
     },
     {
+        path: 'home',
+        title: 'Inicio',
+        loadComponent: () => import('./components/home/home').then(c => c.Home)
+    },
+    {
         path: 'about',
         title: 'Acerca de',
         loadComponent: () => import('./components/about/about').then(c => c.About)

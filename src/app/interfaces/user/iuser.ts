@@ -1,9 +1,9 @@
 import { UserRole } from "../../enums/user-role.enum";
 
-export interface Iuser {
-    email: string;
+export interface IUser {
+    id: string;
     name: string;
     surname: string;
-    enabled: boolean;
+    email: string;
     roleId: UserRole.User;
 }
