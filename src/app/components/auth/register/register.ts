@@ -7,10 +7,10 @@ import { Spinner } from "../../shared/spinner/spinner";
 import { IUser } from '../../../interfaces/user/iuser';
 import { UserRole } from '../../../enums/user-role.enum';
 import { EMAIL_REGEX } from '../../../validators/email.regex';
-import { matchFields } from '../../../validators/match.fields';
 import { Dialogs } from '../../../services/messages/dialogs';
 import { Auth } from '../../../services/supabase/auth/auth';
 import { Database } from '../../../services/supabase/database/database';
+import { Validations } from '../../../services/validations/validations';
 
 @Component({
   selector: 'app-register',
@@ -39,7 +39,7 @@ export class Register implements OnInit {
     repeatPassword: FormControl<string>;
   }>;
 
-  constructor(private auth: Auth, private database: Database, private dialog: Dialogs, private router: Router) { }
+  constructor(private auth: Auth, private database: Database, private dialog: Dialogs, private router: Router, private validations: Validations) { }
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group(
@@ -61,13 +61,12 @@ export class Register implements OnInit {
           updateOn: 'change'
         }),
         repeatPassword: this.formBuilder.control('', {
-          validators: [Validators.required, Validators.minLength(8)],
+          validators: [Validators.required],
           updateOn: 'change'
-        }),
+        })
       },
       {
-        validators: [matchFields('password', 'repeatPassword')],
-        updateOn: 'change'
+        validators: this.validations.confirmPassword()
       }
     );
   }
@@ -124,10 +123,6 @@ export class Register implements OnInit {
         await new Promise(resolve => setTimeout(resolve, 2000));
         this.router.navigate(['/home']);
 
-        /* setTimeout(() => {
-          this.router.navigate(['/home']);
-        }, 2000); */
-
         // muestro mensaje exitoso
         this.dialog.showDialogMessage({
           title: 'Games Room',
@@ -136,7 +131,7 @@ export class Register implements OnInit {
       }
       else {
         //muestro error para debug
-        console.log('error:', error);
+        console.error('error supabase:', error);
         
         // muestro mensaje de error al usuario
         this.dialog.showDialogMessage({
@@ -145,12 +140,12 @@ export class Register implements OnInit {
         });
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       // error para debug
-      console.log('Registration error: ', error);
+      console.error('Error durante el registro: ', error);
 
+      // mensaje por defecto
       let message = 'Error inesperado durante el registro.';
-      message = error.message || message;
 
       this.dialog.showDialogMessage({
         title: 'Games Room',

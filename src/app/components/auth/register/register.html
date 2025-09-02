@@ -96,7 +96,7 @@
                                                 @if (repeatPassword.hasError('required')) {
                                                     <span>Completa el campo con tu contraseña</span>
                                                 }
-                                                @if (registerForm.hasError('fieldsMismatch')) {
+                                                @if (repeatPassword.hasError('noMatch')) {
                                                     <span>Las contraseñas no coinciden</span>
                                                 }
                                             </div>

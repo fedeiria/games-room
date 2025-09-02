@@ -48,6 +48,7 @@ export class Login {
         
         // busco en supabase y traigo sus datos
         const querySnapshot = await this.database.getUserData(this.email.value);
+        console.log('data del usuario: ', querySnapshot);
         
         // guardo el timestamp del login en supabase y redirijo al home
         this.database.saveLoginTimestamp(this.email.value);
@@ -55,7 +56,7 @@ export class Login {
       }
       else {
         //muestro error para debug
-        console.log('error:', error);
+        console.error('error:', error);
         
         // muestro mensaje de error al usuario
         this.dialog.showDialogMessage({
@@ -64,12 +65,12 @@ export class Login {
         });
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       // error para debug
-      console.log('Login error: ', error);
+      console.error('Error durante el login: ', error);
 
+      // mensaje por defecto
       let message = 'Ocurrio un error inesperado.';
-      message = error.message || message;
       
       this.dialog.showDialogMessage({
         title: 'Games Room',
