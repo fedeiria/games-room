@@ -6,7 +6,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 })
 export class Validations {
   
-  EMAIL_REGEX: string = '[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+  public EMAIL_REGEX: string = '[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
 
   confirmPassword(): ValidatorFn {
     return (formGroup: AbstractControl): ValidationErrors | null => {

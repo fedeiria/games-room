@@ -10,6 +10,6 @@ export const environment = {
     },
     supabaseConfig: {
         supabaseUrl: 'https://kohjyhdphpowxqpknyiy.supabase.co',
-        supabaseKey: 'sb_publishable_2GehJ9TukhewAuHQHc6ugw_lAOdTYbK'
+        supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtvaGp5aGRwaHBvd3hxcGtueWl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5MDgzMjksImV4cCI6MjA3MTQ4NDMyOX0.RdKg0KzpDUHaqllW0KUGNDojXHnbBry0x_GwnacXeHA'
     }
 };

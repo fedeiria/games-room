@@ -1,0 +1,40 @@
+.bg-dark {
+    --bs-bg-opacity: 1;
+    background-color: rgba(33, 34, 51, 0.9) !important;
+}
+
+.card {
+    border-radius: 0%;
+}
+
+.card-body {
+    color: rgb(225, 225, 225);
+}
+
+.card-footer {
+    border-color: white;
+    font-weight: 200;
+}
+
+.card-footer a {
+    color: rgb(225, 225, 225);
+    text-decoration: none;
+}
+
+.card-header {
+    color: rgb(225, 225, 225);
+}
+
+.card-title {
+    font-weight: 200;
+    margin-bottom: 25px;
+}
+
+.link-social-media {
+    margin-right: 24px;
+}
+
+.w-inline-block {
+    max-width: 100%;
+    display: inline-block;
+}

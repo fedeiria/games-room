@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { Spinner } from "../../shared/spinner/spinner";
 import { IUser } from '../../../interfaces/user/iuser';
 import { UserRole } from '../../../enums/user-role.enum';
-import { EMAIL_REGEX } from '../../../validators/email.regex';
 import { Dialogs } from '../../../services/messages/dialogs';
 import { Auth } from '../../../services/supabase/auth/auth';
 import { Database } from '../../../services/supabase/database/database';
@@ -45,7 +44,7 @@ export class Register implements OnInit {
     this.registerForm = this.formBuilder.group(
       {
         email: this.formBuilder.control('', {
-          validators: [Validators.required, Validators.pattern(EMAIL_REGEX)],
+          validators: [Validators.required, Validators.pattern(this.validations.EMAIL_REGEX)],
           updateOn: 'blur'
         }),
         name: this.formBuilder.control('', {
@@ -102,7 +101,7 @@ export class Register implements OnInit {
 
       // si el usuario no existe...
       if (data.user) {
-        console.log('valor: ', data);
+        console.log('datos de usuario: ', data);
 
         // guardo los datos del formulario en el objeto
         this.newUser = {
@@ -117,7 +116,7 @@ export class Register implements OnInit {
         this.database.saveNewUser(this.newUser);
 
         // guardo la fecha de login del usuario
-        this.database.saveLoginTimestamp(this.newUser.email);
+        this.database.saveLoginTimestamp(this.newUser.id);
 
         // ejecuto un delay y redirijo al home
         await new Promise(resolve => setTimeout(resolve, 2000));

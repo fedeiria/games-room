@@ -1,0 +1,74 @@
+a img {
+    margin-left: 20px;
+}
+
+.bg-dark {
+    --bs-bg-opacity: 1;
+    background-color: rgba(33, 34, 51, 0.9) !important;
+}
+
+.btn-login-register {
+    gap: .5rem !important;
+    display: flex !important;
+    margin-left: auto !important;
+    margin-right: 1rem;
+}
+
+.btn-warning {
+    color: #f9faff;
+    background: #6842ff;
+    border: none;
+    border-radius: 30px;
+}
+
+.btn-warning:hover {
+    color: #f9faff;
+    background: #7c5cfc;
+}
+
+.card {
+    border: none;
+    border-radius: 0%;
+}
+
+.games-room-logo {
+    flex: 0 0 auto;
+    width: 25%;
+    margin-bottom: 0 !important;
+    margin-left: 1rem;
+}
+
+.games-room-name {
+    color: aliceblue;
+    font-weight: 500;
+}
+
+.me-4 {
+    margin-right: 4.5rem !important;
+}
+
+.nav {
+    color: rgb(225, 225, 225);
+    font-size: 1.1rem;
+}
+
+.navbar {
+    background-color: rgba(33, 34, 51, 0.9) !important;
+}
+
+.nav-link {
+    font-size: large;
+}
+
+.navbar-text {
+    color: white;
+    margin-left: 2rem;
+}
+
+.text-end {
+    width: 10px;
+    cursor: pointer;
+    color: whitesmoke;
+    margin-right: 4rem;
+    text-align: center !important;
+}

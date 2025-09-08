@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseClient } from '@supabase/supabase-js';
 
-import { environment } from '../../../../environments/environment';
 import { IUser } from '../../../interfaces/user/iuser';
+import { createSupabaseClientConnection } from '../../../core/supabase/client-connection';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Database {
   
-  private readonly supabase: SupabaseClient;
+  private readonly supabaseClient: SupabaseClient;
 
   constructor() {
-    this.supabase = createClient(environment.supabaseConfig.supabaseUrl, environment.supabaseConfig.supabaseKey, { auth: { autoRefreshToken: false, persistSession: true } });
+    this.supabaseClient = createSupabaseClientConnection();
   }
 
   // inserta un nuevo usuario en 'users'
-  async saveNewUser(newUser: IUser) {
-    const { error } = await this.supabase.from('users').insert({ id: newUser.id, name: newUser.name, surname: newUser.surname, email: newUser.email, role_id: newUser.roleId, created_at: new Date() });
+  async saveNewUser(newUser: IUser): Promise<void> {
+    const { error } = await this.supabaseClient.from('users').insert({ id: newUser.id, name: newUser.name, surname: newUser.surname, email: newUser.email, role_id: newUser.roleId, created_at: new Date() });
     
     if (error) {
       console.log('database error: ', error);
@@ -25,19 +25,23 @@ export class Database {
   }
 
   // guarda el registro de conexion del usuario
-  async saveLoginTimestamp(email: string) {
-    const { error } = await this.supabase.from('logins').insert({ email: email, created_at: new Date() });
+  async saveLoginTimestamp(user_id: string): Promise<void> {
+    const { error } = await this.supabaseClient.from('logins').insert({ user_id: user_id, created_at: new Date() });
 
     if (error) {
       console.log('database error: ', error);
     }
   }
 
-  async getUserData(email: string) {
-    const { error } = await this.supabase.from('users').select('*').gte('email', email);
+  // obtiene los datos de un usuario
+  async getUserData(userId: string | undefined): Promise<any[] | null> {
+    const { data, error } = await this.supabaseClient.from('users').select().eq('id', userId);
 
     if (error) {
-      console.log('database error: ', error);
+      console.error('error supabase: ', error);
+      return null;
     }
+
+    return data;
   }
 }

@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Spinner } from "../../shared/spinner/spinner";
-import { EMAIL_REGEX } from '../../../validators/email.regex';
 import { Auth } from '../../../services/supabase/auth/auth';
 import { Database } from '../../../services/supabase/database/database';
 import { Dialogs } from '../../../services/messages/dialogs';
+import { Validations } from '../../../services/validations/validations';
 
 @Component({
   selector: 'app-login',
@@ -15,17 +15,20 @@ import { Dialogs } from '../../../services/messages/dialogs';
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
-export class Login {
+export class Login implements OnInit {
 
+  loginForm!: FormGroup;
   protected loading: boolean = false;
 
-  constructor(private auth: Auth, private database: Database, private dialog: Dialogs, private router: Router) { }
+  constructor(private auth: Auth, private database: Database, private dialog: Dialogs, private router: Router, private validations: Validations) { }
   
-  loginForm = new FormGroup<{ email: FormControl<string | null>; password: FormControl<string | null>; }>({
-    email: new FormControl('', [Validators.pattern(EMAIL_REGEX), Validators.required]),
-    password: new FormControl('', Validators.required)
-  });
-
+  ngOnInit() {
+      this.loginForm = new FormGroup<{ email: FormControl<string | null>; password: FormControl<string | null>; }>({
+      email: new FormControl('', [Validators.pattern(this.validations.EMAIL_REGEX), Validators.required]),
+      password: new FormControl('', Validators.required)
+    });
+  }
+  
   // GETTERS
   get email(): FormControl<string> {
     return this.loginForm.get('email') as FormControl<string>;
@@ -43,15 +46,9 @@ export class Login {
       // llamo al servicio para corroborar el login del usuario
       const { data, error } = await this.auth.signInWithEmailAndPassword(this.email.value, this.password.value);
       
-      // si el usuario esta registrado...
+      // si el usuario esta registrado guardo el timestamp del login en supabase y redirijo al home
       if (data.user) {
-        
-        // busco en supabase y traigo sus datos
-        const querySnapshot = await this.database.getUserData(this.email.value);
-        console.log('data del usuario: ', querySnapshot);
-        
-        // guardo el timestamp del login en supabase y redirijo al home
-        this.database.saveLoginTimestamp(this.email.value);
+        this.database.saveLoginTimestamp(data.user.id);
         this.router.navigate(['/home']);
       }
       else {
