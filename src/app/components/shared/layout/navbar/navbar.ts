@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
-import { UserRole } from '../../../enums/user-role.enum';
-import { Auth } from '../../../services/supabase/auth/auth';
-import { Database } from '../../../services/supabase/database/database';
-import { IUser } from '../../../interfaces/user/iuser';
+import { UserRole } from '../../../../enums/user-role.enum';
+import { Auth } from '../../../../services/supabase/auth/auth';
+import { Database } from '../../../../services/supabase/database/database';
+import { IUser } from '../../../../interfaces/user/iuser';
 
 @Component({
   selector: 'app-navbar',
@@ -33,7 +33,7 @@ export class Navbar implements OnInit {
       // obtengo el id del usuario logueado
       const userId = userDetails.data.user?.id;
 
-      if (userId === undefined || userId === null) {
+      if (!userId) {
         return;
       }
 

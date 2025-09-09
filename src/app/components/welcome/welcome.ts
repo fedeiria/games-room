@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { Navbar } from "../shared/navbar/navbar";
-import { Footer } from "../shared/footer/footer";
+
+import { Footer } from "../shared/layout/footer/footer";
+import { Navbar } from "../shared/layout/navbar/navbar";
+import { Main } from "../shared/layout/main/main";
 
 @Component({
   selector: 'app-welcome',
-  imports: [Navbar, Footer],
+  imports: [Footer, Navbar, Main],
   templateUrl: './welcome.html',
   styleUrl: './welcome.scss'
 })

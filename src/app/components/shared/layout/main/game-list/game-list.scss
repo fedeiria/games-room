@@ -1,0 +1,47 @@
+.main-content {
+    background-color: rgb(14, 13, 13);
+}
+
+.content-description {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 50px;
+    padding-bottom: 35px;
+    text-align: center;
+    justify-content: center;
+}
+
+.game-description img {
+    height: 200px;
+}
+
+.game-description h3 {
+    color: whitesmoke;
+    margin-top: 20px;
+    margin-bottom: -5px;
+    font-size: 25px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.game-description p {
+    font-size: 15px;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.btn {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 35px;
+    width: 250px;
+    height: 40px;
+    border: none;
+    cursor: pointer;
+    font-weight: 400;
+    font-family: 'Montserrat', sans-serif;
+}
+
+img {
+    border-radius: 10%;
+}
