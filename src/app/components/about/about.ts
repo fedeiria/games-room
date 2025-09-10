@@ -12,6 +12,6 @@ export class About {
   constructor(private router: Router) { }
 
   backToHome() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/']);
   }
 }

@@ -1,0 +1,40 @@
+.btn-play {
+  background-color: #ffc107;
+  color: #212529;
+  font-weight: bold;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-play:hover {
+  background-color: #ffca2c;
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    text-align: center;
+}
+
+.hover-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.hover-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.row {
+    margin-top: calc(1 * var(--bs-gutter-y));
+    margin-bottom: 3rem;
+}
+
+.small-card {
+  width: 14rem;
+  padding: 0.5rem;
+}
