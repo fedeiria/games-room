@@ -26,7 +26,7 @@ export class GamesSection {
     },
     {
       name: 'Mayor o Menor',
-      description: 'Adivina si la carta siguiente es mayor o menor a la carta mostrada!',
+      description: 'Adivina si la carta siguiente es mayor o menor a la carta actual!',
       image: '../../../../assets/images/game-cover/mayor-menor.png',
       link: '/mayor-menor'
     },
