@@ -4,12 +4,12 @@ import { IGameList } from '../../../../interfaces/game-list/igame-list';
 import { GameList } from './game-list/game-list';
 
 @Component({
-  selector: 'app-main',
+  selector: 'app-section',
   imports: [GameList],
-  templateUrl: './main.html',
-  styleUrl: './main.scss'
+  templateUrl: './section.html',
+  styleUrl: './section.scss'
 })
-export class Main {
+export class Section {
 
   gameList: IGameList[] = [
     {

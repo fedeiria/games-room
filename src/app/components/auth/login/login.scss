@@ -4,18 +4,25 @@
 }
 
 .btn-primary {
-    margin-top: 25px;
-    font-weight: 200;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    border-color: rgba(33, 37, 41, 1);
-    background-color: rgb(27, 79, 131);
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
 }
 
 .card {
-    margin-left: 10px;
-    margin-right: 10px;
-    overflow-x: hidden;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  background-color: rgba(33, 37, 41, 0.95); /* dark con transparencia */
+  color: #fff;
 }
 
 .card-body {
@@ -32,6 +39,18 @@
 
 .forgot-password a :hover {
     cursor: pointer;
+}
+
+.form-control {
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
 }
 
 .form-group label {
@@ -73,10 +92,6 @@ label {
     margin-bottom: 1.5rem !important;
 }
 
-.mx-auto {
-    margin-top: 4rem;
-}
-
 .user-register a {
     margin-left: 5px;
 }
@@ -88,4 +103,14 @@ label {
 .user-register span {
     color: grey;
     line-height: 16px;
+}
+
+.login-background {
+  //background: linear-gradient(to right, #1e3c72, #2a5298);
+  background-color: black;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }

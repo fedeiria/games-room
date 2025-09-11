@@ -25,8 +25,9 @@
 }
 
 .hover-card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .row {
@@ -37,4 +38,17 @@
 .small-card {
   width: 14rem;
   padding: 0.5rem;
+}
+
+@media (min-width: 990px) {
+  .games-section .col-lg-3 {
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
+}
+
+@media (min-width: 990px) {
+  .small-card {
+    padding: 10px;
+  }
 }

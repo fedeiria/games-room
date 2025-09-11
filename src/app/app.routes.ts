@@ -34,6 +34,11 @@ export const routes: Routes = [
         title: 'Inicio',
         loadComponent: () => import('./components/home/home').then(c => c.Home)
     },
+    {
+        path: 'games',
+        title: 'Juegos',
+        loadChildren: () => import('./modules/games/games-module').then(m => m.GamesModule)
+    },
 
     // page not found (404)
     {
