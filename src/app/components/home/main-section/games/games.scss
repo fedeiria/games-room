@@ -16,23 +16,23 @@
 }
 
 .card-body {
-    text-align: center;
+  text-align: center;
 }
 
 .hover-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform;
   cursor: pointer;
 }
 
 .hover-card:hover {
   transform: translateY(-5px) scale(1.03);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .row {
-    margin-top: calc(1 * var(--bs-gutter-y));
-    margin-bottom: 3rem;
+  margin-top: calc(1 * var(--bs-gutter-y));
+  margin-bottom: 3rem;
 }
 
 .small-card {
@@ -40,15 +40,32 @@
   padding: 0.5rem;
 }
 
-@media (min-width: 990px) {
-  .games-section .col-lg-3 {
-    flex: 0 0 20%;
-    max-width: 20%;
+@media (min-width: 990px) and (min-height: 925px) {
+  .games-section {
+    padding: 40px 60px;
   }
-}
 
-@media (min-width: 990px) {
+  .hover-card:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-title {
+    font-size: 1.4rem;
+  }
+
+  .card-text {
+    font-size: 1rem;
+  }
+
+  .btn-play {
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 8px;
+  }
+
   .small-card {
-    padding: 10px;
+    width: 16rem;
+    padding: 1rem;
   }
 }

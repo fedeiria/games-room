@@ -6,7 +6,7 @@
         <app-spinner />
         }
 
-        <!-- [attr.inert] disable interaction with the form while the spinner is active -->
+        <!-- atributo inert deshabilita la interaccion con el form mientras el spinner esta activo -->
         <div [attr.inert]="loading ? '' : null">
             <div class="row">
                 <div class="col-lg-7 mx-auto">
@@ -23,18 +23,16 @@
                                             <label for="form-name">Nombre
                                                 <span class="span-required">*</span>
                                             </label>
-                                            <input type="text" class="form-control" formControlName="name"
-                                                id="form-name" name="name" placeholder="Ingresa tu nombre" required
-                                                aria-required="true" maxlength="45">
+                                            <input type="text" class="form-control" formControlName="name" id="form-name" name="name" placeholder="Ingresa tu nombre" required aria-required="true" maxlength="45">
                                             @if (name.invalid && (name.dirty || name.touched)) {
-                                            <div class="alert alert-danger mt-2">
-                                                @if (name.hasError('required')) {
-                                                <span>Completa el campo con tu nombre</span>
-                                                }
-                                                @if (name.hasError('pattern')) {
-                                                <span>No es un nombre valido</span>
-                                                }
-                                            </div>
+                                                <div class="alert alert-danger mt-2">
+                                                    @if (name.hasError('required')) {
+                                                        <span>Completa el campo con tu nombre</span>
+                                                    }
+                                                    @if (name.hasError('pattern')) {
+                                                        <span>No es un nombre valido</span>
+                                                    }
+                                                </div>
                                             }
 
                                             <!-- surname -->
@@ -42,17 +40,15 @@
                                                 Apellido
                                                 <span class="span-required">*</span>
                                             </label>
-                                            <input type="text" class="form-control" formControlName="surname"
-                                                id="form-surname" name="surname" placeholder="Ingresa tu apellido"
-                                                required aria-required="true" maxlength="45">
+                                            <input type="text" class="form-control" formControlName="surname" id="form-surname" name="surname" placeholder="Ingresa tu apellido" required aria-required="true" maxlength="45">
                                             @if (surname.invalid && (surname.dirty || surname.touched)) {
-                                            <div class="alert alert-danger mt-2">
-                                                @if (surname.hasError('required')) {
-                                                <span>Completa el campo con tu apellido</span>
-                                                }
-                                                @if (surname.hasError('pattern')) {
-                                                <span>No es un apellido valido</span>
-                                                }
+                                                <div class="alert alert-danger mt-2">
+                                                    @if (surname.hasError('required')) {
+                                                        <span>Completa el campo con tu apellido</span>
+                                                    }
+                                                    @if (surname.hasError('pattern')) {
+                                                        <span>No es un apellido valido</span>
+                                                    }
                                             </div>
                                             }
 
@@ -61,18 +57,16 @@
                                                 Correo electronico
                                                 <span class="span-required">*</span>
                                             </label>
-                                            <input type="email" class="form-control" formControlName="email"
-                                                id="form-email" name="email" placeholder="Ingresa tu correo electronico"
-                                                required aria-required="true" maxlength="55" autocomplete="email">
+                                            <input type="email" class="form-control" formControlName="email" id="form-email" name="email" placeholder="Ingresa tu correo electronico" required aria-required="true" maxlength="55" autocomplete="email">
                                             @if (email.invalid && (email.dirty || email.touched)) {
-                                            <div class="alert alert-danger mt-2">
-                                                @if (email.hasError('required')) {
-                                                <span>Completa el campo con tu correo electronico</span>
-                                                }
-                                                @if (email.hasError('pattern')) {
-                                                <span>Correo electronico invalido</span>
-                                                }
-                                            </div>
+                                                <div class="alert alert-danger mt-2">
+                                                    @if (email.hasError('required')) {
+                                                        <span>Completa el campo con tu correo electronico</span>
+                                                    }
+                                                    @if (email.hasError('pattern')) {
+                                                        <span>Correo electronico invalido</span>
+                                                    }
+                                                </div>
                                             }
 
                                             <!-- password -->
@@ -80,19 +74,16 @@
                                                 Contraseña
                                                 <span class="span-required">*</span>
                                             </label>
-                                            <input type="password" class="form-control" formControlName="password"
-                                                id="form-password" name="password" placeholder="Ingresa tu contraseña"
-                                                required aria-required="true" maxlength="35">
+                                            <input type="password" class="form-control" formControlName="password" id="form-password" name="password" placeholder="Ingresa tu contraseña" required aria-required="true" maxlength="35">
                                             @if (password.invalid && (password.dirty || password.touched)) {
-                                            <div class="alert alert-danger mt-2">
-                                                @if (password.hasError('required')) {
-                                                <span>Completa el campo con tu contraseña</span>
-                                                }
-                                                @if (password.hasError('minlength')) {
-                                                <span>La contraseña debe tener un minimo de {{
-                                                    password.getError('minlength').requiredLength }} caracteres</span>
-                                                }
-                                            </div>
+                                                <div class="alert alert-danger mt-2">
+                                                    @if (password.hasError('required')) {
+                                                        <span>Completa el campo con tu contraseña</span>
+                                                    }
+                                                    @if (password.hasError('minlength')) {
+                                                        <span>La contraseña debe tener un minimo de {{ password.getError('minlength').requiredLength }} caracteres</span>
+                                                    }
+                                                </div>
                                             }
 
                                             <!-- repeat password -->
@@ -100,28 +91,32 @@
                                                 Repetir Contraseña
                                                 <span class="span-required">*</span>
                                             </label>
-                                            <input type="password" class="form-control" formControlName="repeatPassword"
-                                                id="form-repeat-password" name="repeat-password"
-                                                placeholder="Ingresa tu contraseña" required aria-required="true"
+                                            <input type="password" class="form-control" formControlName="repeatPassword" id="form-repeat-password" name="repeat-password" placeholder="Ingresa tu contraseña" required aria-required="true"
                                                 maxlength="35">
-                                            @if (repeatPassword.invalid && (repeatPassword.dirty ||
-                                            repeatPassword.touched)) {
-                                            <div class="alert alert-danger mt-2">
-                                                @if (repeatPassword.hasError('required')) {
-                                                <span>Completa el campo con tu contraseña</span>
-                                                }
-                                                @if (repeatPassword.hasError('noMatch')) {
-                                                <span>Las contraseñas no coinciden</span>
-                                                }
-                                            </div>
+                                            @if (repeatPassword.invalid && (repeatPassword.dirty || repeatPassword.touched)) {
+                                                <div class="alert alert-danger mt-2">
+                                                    @if (repeatPassword.hasError('required')) {
+                                                        <span>Completa el campo con tu contraseña</span>
+                                                    }
+                                                    @if (repeatPassword.hasError('noMatch')) {
+                                                        <span>Las contraseñas no coinciden</span>
+                                                    }
+                                                </div>
                                             }
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="d-grid gap-2">
-                                            <input type="submit" class="btn btn-primary" value="Registrarse"
-                                                [disabled]="registerForm.invalid || loading">
+                                            <input type="submit" class="btn btn-primary" value="Registrarse" [disabled]="registerForm.invalid || loading">
                                         </div>
+                                    </div>
+
+                                    <!-- link login -->
+                                    <div class="user-login">
+                                        <span>¿Ya tenes una cuenta?</span>
+                                        <a routerLink="/login" routerLinkActive="active">
+                                            <label for="user-login">Iniciar sesion</label>
+                                        </a>
                                     </div>
                                 </form>
                             </div>

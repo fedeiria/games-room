@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Spinner } from "../../shared/spinner/spinner";
 import { Auth } from '../../../services/supabase/auth/auth';
-import { Database } from '../../../services/supabase/database/database';
 import { Dialogs } from '../../../services/messages/dialogs';
 import { Validations } from '../../../services/validations/validations';
+import { Logins } from '../../../services/supabase/database/logins/logins';
 
 @Component({
   selector: 'app-login',
@@ -17,28 +17,40 @@ import { Validations } from '../../../services/validations/validations';
 })
 export class Login implements OnInit {
 
-  loginForm!: FormGroup;
   protected loading: boolean = false;
 
-  constructor(private auth: Auth, private database: Database, private dialog: Dialogs, private router: Router, private validations: Validations) { }
+  protected loginForm!: FormGroup<{
+    email: FormControl<string>;
+    password: FormControl<string>;
+  }>;
+
+  constructor(private auth: Auth, private dialog: Dialogs, private formBuilder: NonNullableFormBuilder, private logins: Logins, private router: Router, private validations: Validations) { }
   
-  ngOnInit() {
-      this.loginForm = new FormGroup<{ email: FormControl<string | null>; password: FormControl<string | null>; }>({
-      email: new FormControl('', [Validators.pattern(this.validations.EMAIL_REGEX), Validators.required]),
-      password: new FormControl('', Validators.required)
-    });
+  ngOnInit(): void {
+    this.loginForm = this.formBuilder.group(
+      {
+        email: this.formBuilder.control('', {
+          validators: [Validators.required, Validators.pattern(this.validations.EMAIL_REGEX)],
+          updateOn: 'blur'
+        }),
+        password: this.formBuilder.control('', {
+          validators: [Validators.required],
+          updateOn: 'change'
+        })
+      }
+    );
   }
   
   // GETTERS
   get email(): FormControl<string> {
-    return this.loginForm.get('email') as FormControl<string>;
+    return this.loginForm.controls.email;
   }
 
   get password(): FormControl<string> {
-    return this.loginForm.get('password') as FormControl<string>;
+    return this.loginForm.controls.password;
   }
 
-  async onSubmit() {
+  async onSubmit(): Promise<void> {
     // muestro el spinner
     this.loading = true;
     
@@ -48,7 +60,7 @@ export class Login implements OnInit {
       
       // si el usuario esta registrado guardo el timestamp del login en supabase y redirijo al home
       if (data.user) {
-        this.database.saveLoginTimestamp(data.user.id);
+        this.logins.saveLoginTimestamp(data.user.id);
         this.router.navigate(['/home']);
       }
       else {
@@ -58,7 +70,7 @@ export class Login implements OnInit {
         // muestro mensaje de error al usuario
         this.dialog.showDialogMessage({
           title: 'Games Room',
-          content: 'Error de Usuario / Contrasena. Verifica tus datos.'
+          content: 'Error de Usuario / Contraseña. Verifica tus datos.'
         });
       }
     }

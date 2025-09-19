@@ -6,7 +6,7 @@
         <app-spinner />
         }
 
-        <!-- inert attribute disable interaction with the form while the spinner is active -->
+        <!-- atributo inert deshabilita la interaccion con el form mientras el spinner esta activo -->
         <div [attr.inert]="loading ? '' : null">
             <div class="row">
                 <div class="col-lg-7 mx-auto">
@@ -14,42 +14,35 @@
                         <h5>¡Te damos la bienvenida de nuevo!</h5>
                         <div class="card-body">
                             <div class="container">
-                                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" id="contact-form" role="form"
-                                    [attr.aria-disabled]="loading ? 'true' : null">
+                                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" id="contact-form" role="form" [attr.aria-disabled]="loading ? 'true' : null">
                                     <div class="row">
 
                                         <!-- email -->
                                         <div class="form-group">
                                             <label for="form-email">Correo Electronico</label>
-                                            <input type="email" class="form-control" formControlName="email"
-                                                id="form-email" name="email"
-                                                placeholder="Ingresa tu correo electronico" required
-                                                aria-required="true" maxlength="55" autocomplete="email">
+                                            <input type="email" class="form-control" formControlName="email" id="form-email" name="email" placeholder="Ingresa tu correo electronico" required aria-required="true" maxlength="55" autocomplete="email">
                                             @if (email.invalid && (email.dirty || email.touched)) {
-                                            <div class="alert alert-danger mt-2">
-                                                @if (email.hasError('required')) {
-                                                <span>Completa el campo con tu correo electronico</span>
-                                                }
-                                                @if (email.hasError('pattern')) {
-                                                <span>Correo electronico invalido</span>
-                                                }
-                                            </div>
+                                                <div class="alert alert-danger mt-2">
+                                                    @if (email.hasError('required')) {
+                                                        <span>Completa el campo con tu correo electronico</span>
+                                                    }
+                                                    @if (email.hasError('pattern')) {
+                                                        <span>Correo electronico invalido</span>
+                                                    }
+                                                </div>
                                             }
                                         </div>
 
                                         <!-- password -->
                                         <div class="form-group">
                                             <label for="form-password">Contraseña</label>
-                                            <input type="password" class="form-control" formControlName="password"
-                                                id="form-password" name="password"
-                                                placeholder="Ingresa tu contraseña" required aria-required="true"
-                                                maxlength="35">
+                                            <input type="password" class="form-control" formControlName="password" id="form-password" name="password" placeholder="Ingresa tu contraseña" required aria-required="true" maxlength="35">
                                             @if (password.invalid && (password.dirty || password.touched)) {
-                                            <div class="alert alert-danger mt-2">
-                                                @if (password.hasError('required')) {
-                                                <span>Completa el campo con tu contraseña</span>
-                                                }
-                                            </div>
+                                                <div class="alert alert-danger mt-2">
+                                                    @if (password.hasError('required')) {
+                                                        <span>Completa el campo con tu contraseña</span>
+                                                    }
+                                                </div>
                                             }
                                         </div>
                                     </div>
@@ -64,8 +57,7 @@
                                     <!-- btn login -->
                                     <div class="row">
                                         <div class="d-grid gap-2">
-                                            <input type="submit" class="btn btn-primary" value="Ingresar"
-                                                [disabled]="loginForm.invalid || loading">
+                                            <input type="submit" class="btn btn-primary" value="Ingresar" [disabled]="loginForm.invalid || loading">
                                         </div>
                                     </div>
 

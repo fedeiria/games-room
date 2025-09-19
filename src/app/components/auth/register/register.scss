@@ -64,20 +64,20 @@ h1 {
 
 h5 {
     color: aliceblue;
-    font-weight: 600;
+    font-size: x-large;
     margin-top: 1rem;
     margin-bottom: 1.5rem;
     text-align: center;
 }
 
 label {
+    color: whitesmoke;
     margin-top: 15px;
     margin-bottom: 5px;
     padding-top: 5px;
 }
 
 .register-background {
-    //background: linear-gradient(to right, #061023, #0f0202);
     background-color: black;
     min-height: 100vh;
     display: flex;
@@ -88,4 +88,17 @@ label {
 
 .span-required {
     color: hsl(359 calc( 1 * 87.3%) 59.8% / 1);
+}
+
+.user-login a {
+    margin-left: 5px;
+}
+
+.user-login a :hover{
+    cursor: pointer;
+}
+
+.user-login span {
+    color: grey;
+    line-height: 16px;
 }

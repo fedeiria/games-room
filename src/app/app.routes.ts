@@ -34,6 +34,7 @@ export const routes: Routes = [
         title: 'Inicio',
         loadComponent: () => import('./components/home/home').then(c => c.Home)
     },
+    // load module: gamesModule
     {
         path: 'games',
         title: 'Juegos',

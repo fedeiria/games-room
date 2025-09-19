@@ -1,36 +1,29 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 
-import { Router } from '@angular/router';
 import { Spinner } from "../../shared/spinner/spinner";
 import { IUser } from '../../../interfaces/user/iuser';
 import { UserRole } from '../../../enums/user-role.enum';
 import { Dialogs } from '../../../services/messages/dialogs';
 import { Auth } from '../../../services/supabase/auth/auth';
-import { Database } from '../../../services/supabase/database/database';
 import { Validations } from '../../../services/validations/validations';
+import { Logins } from '../../../services/supabase/database/logins/logins';
+import { Users } from '../../../services/supabase/database/users/users';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, Spinner],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, Spinner],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
 export class Register implements OnInit {
 
+  private newUser!: IUser;
   protected loading: boolean = false;
-  private readonly formBuilder = inject(NonNullableFormBuilder);
 
-  newUser: IUser = {
-    id: '',
-    name: '',
-    surname: '',
-    email: '',
-    roleId: UserRole.User
-  }
-
-  registerForm!: FormGroup<{
+  protected registerForm!: FormGroup<{
     email: FormControl<string>;
     name: FormControl<string>;
     surname: FormControl<string>;
@@ -38,7 +31,7 @@ export class Register implements OnInit {
     repeatPassword: FormControl<string>;
   }>;
 
-  constructor(private auth: Auth, private database: Database, private dialog: Dialogs, private router: Router, private validations: Validations) { }
+  constructor(private auth: Auth, private dialog: Dialogs, private formBuilder: NonNullableFormBuilder, private logins: Logins, private router: Router, private users: Users, private validations: Validations) { }
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group(
@@ -91,7 +84,7 @@ export class Register implements OnInit {
     return this.registerForm.controls.repeatPassword;
   }
 
-  async onSubmit() {
+  async onSubmit(): Promise<void> {
     // muestro el spinner
     this.loading = true;
 
@@ -113,10 +106,10 @@ export class Register implements OnInit {
         }
 
         // guardo los datos del usuario
-        this.database.saveNewUser(this.newUser);
+        this.users.saveNewUser(this.newUser);
 
         // guardo la fecha de login del usuario
-        this.database.saveLoginTimestamp(this.newUser.id);
+        this.logins.saveLoginTimestamp(this.newUser.id);
 
         // ejecuto un delay y redirijo al home
         await new Promise(resolve => setTimeout(resolve, 2000));

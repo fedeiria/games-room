@@ -3,8 +3,8 @@ import { Router, RouterLink } from '@angular/router';
 
 import { UserRole } from '../../../../enums/user-role.enum';
 import { Auth } from '../../../../services/supabase/auth/auth';
-import { Database } from '../../../../services/supabase/database/database';
 import { IUser } from '../../../../interfaces/user/iuser';
+import { Users } from '../../../../services/supabase/database/users/users';
 
 @Component({
   selector: 'app-navbar',
@@ -18,7 +18,7 @@ export class Navbar implements OnInit {
   UserRole = UserRole;
   authState: UserRole = UserRole.Guess;
 
-  constructor(private auth: Auth, private database: Database, private router: Router) { }
+  constructor(private auth: Auth, private users: Users, private router: Router) { }
 
   ngOnInit() {
     this.getUserRole();
@@ -38,7 +38,7 @@ export class Navbar implements OnInit {
       }
 
       // obtengo el role_id del usuario
-      const userData = await this.database.getUserData(userId);
+      const userData = await this.users.getUserData(userId);
 
       if (!userData || userData.length === 0) {
         return;

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 
-import { GamesSection } from "./games-section/games-section";
+import { Games } from "./games/games";
+import { Chat } from "./chat/chat";
 
 @Component({
   selector: 'app-main-section',
-  imports: [GamesSection],
+  imports: [Games, Chat],
   templateUrl: './main-section.html',
   styleUrl: './main-section.scss'
 })

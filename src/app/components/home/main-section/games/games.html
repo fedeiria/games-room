@@ -1,0 +1,20 @@
+<div class="container-fluid games-section">
+    <div class="d-flex justify-content-center">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-4 justify-content-center">
+            @for (game of this.games; track $index) {
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="card h-100 hover-card small-card">
+                        <img src={{game.image}} class="card-img-top" alt={{game.name}}>
+                        <div class="card-body">
+                            <h5 class="card-title">{{game.name}}</h5>
+                            <p class="card-text">{{game.description}}</p>
+                        </div>
+                        <div class="card-body">
+                            <button type="button" class="btn-play" routerLink={{game.link}}>JUGAR AHORA</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
