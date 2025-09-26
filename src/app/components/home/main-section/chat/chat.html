@@ -1,1 +1,50 @@
-<p>Componente chat</p>
+<section class="chat-container">
+    @if (this.isChatVisible) {
+        <div class="card text-center container-card view-from-right">
+
+            <!-- Chat Header with Toggle -->
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>CHAT</span>
+                <button class="btn btn-sm btn-outline-light" (click)="this.toggleChatVisibility()">
+                    -
+                </button>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="card-body">
+                <div #messageContainer class="message-container" id="message-container" role="log" aria-live="polite">
+                    @if (this.messages$ | async; as messages) {
+                        @if (this.emailMap$ | async; as emails) {
+                            @for (message of messages; track message.id) {
+                                <p class="message-box messages"
+                                [class.my-message]="message.userId === this.userDetails.data.user?.id"
+                                [class.other-messages]="message.userId !== this.userDetails.data.user?.id">
+                                    <span>{{ emails.get(message.userId) }}</span>
+                                    <br/>{{ message.content }}<br/>
+                                    <span class="date">{{ message.createdAt | date: 'short' }}</span>
+                                </p>
+                            }
+                        }
+                    }
+                    
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <form class="card-footer" (ngSubmit)="this.onSubmit($event)">
+                <input type="text" class="form-control" placeholder="Ingresa tu mensaje..."
+                    [(ngModel)]="this.newMessage"
+                    [ngModelOptions]="{ standalone: true }"/>
+                <button class="btn-chat" type="submit" [disabled]="!this.newMessage.trim()">Enviar</button>
+            </form>
+        </div>
+    }
+    @else {
+        <!-- Minimized Chat Icon -->
+        <div class="card minimized-chat" (click)="this.toggleChatVisibility()">
+            <div class="card-header text-center">
+                <button class="btn btn-sm btn-outline-primary">+</button>
+            </div>
+        </div>
+    }
+</section>

@@ -1,0 +1,218 @@
+.ahorcado-container {
+  font-family: "Poppins", sans-serif;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  min-height: 100vh;
+}
+  
+.game-container {
+  padding-top: 1rem;
+}
+  
+.container-btn {
+  padding-top: 1.5rem;
+}
+  
+.disabled-button {
+  background-color: grey;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.word-btn:disabled:hover {
+  background-color: grey;
+  cursor: not-allowed;
+}
+
+.word-btn:disabled {
+  opacity: 0.6;
+}
+
+.word-guess {
+  text-align: center;
+  color: rgba(33, 34, 51, 0.9);
+  text-shadow: 2px 2px 2px white;
+  font-weight: bold;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.col-md-12.text-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.keypad {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-flow: wrap;
+  margin-top: 30px;
+}
+
+.attempts {
+  text-align: center;
+  color: rgba(33, 34, 51, 0.9);
+  font-weight: bold;
+  font-size: x-large;
+}
+
+.points {
+  font-size: 1rem;
+}
+
+.img-ahorcado {
+  width: 10rem;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 30px;
+}
+
+.word-btn {
+  padding: 1em 2em;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+  background-color: rgba(33, 34, 51, 0.9);
+  border: none;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  margin-bottom: 0.5rem;
+}
+
+.word-btn:hover {
+  background-color: #6842ff;
+  box-shadow: 0px 15px 20px rgba(116, 62, 133, 0.8);
+  color: #fff;
+  transform: translateY(-7px);
+}
+
+.word-btn:active {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  margin-top: 25px;
+  margin-left: 25px;
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  font-weight: 200;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #f9faff;
+  background: #6842ff;
+  border: none;
+  border-radius: 30px;
+}
+
+.btn-primary:hover {
+  color: #f9faff;
+  background: #7c5cfc;
+}
+
+.btn-restart {
+  padding: 1.3em 3em;
+  padding-bottom: 20px;
+  font-size: 15px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: center;
+  color: #f9faff;
+  background: #6842ff;
+  border: none;
+  border-radius: 40px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  display: block;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: auto;
+}
+
+.btn-restart:hover {
+  color: #f9faff;
+  background: #7c5cfc;
+}
+
+.btn-restart:active {
+  transform: translateY(-1px);
+}
+
+.selected-game-word {
+  padding: 1.3em 3em;
+  padding-bottom: 20px;
+  cursor: text;
+  font-size: 15px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #f9faff;
+  background: #6842ff;
+  border: none;
+  border-radius: 30px;
+  text-align: center;
+  width: max-content;
+  display: block;
+  margin-top: 30px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: auto;
+}
+
+.game-result {
+  padding: 1.3em 3em;
+  padding-bottom: 20px;
+  cursor: text;
+  font-size: 15px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #f9faff;
+  background: #8bc47d;
+  border: none;
+  border-radius: 30px;
+  text-align: center;
+  width: max-content;
+  display: block;
+  margin-top: 30px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: auto;
+}
+
+// Responsive design
+@media screen and (max-width: 480px) {
+  .img-ahorcado {
+    width: 10rem;
+  }
+
+  .word-btn {
+    padding: 0.7em 1.5em;
+    font-size: 9px;
+    font-weight: bolder;
+  }
+
+  .selected-game-word {
+    font-size: 10px;
+  }
+
+  .d-inline {
+    font-size: 10px;
+  }
+
+  .keypad {
+    margin-top: 20px;
+  }
+}

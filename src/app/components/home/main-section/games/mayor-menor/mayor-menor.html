@@ -1,1 +1,35 @@
-<p>mayor-menor works!</p>
+<section class="mayor-menor-container">
+    <button class="btn btn-primary" (click)="backToHome()">Volver</button>
+        <div class="container d-flex flex-column justify-content-center">
+            <div class="col">
+                <img class="img-mayor-menor" src="{{this.gameCover}}" alt="mayor o menor">
+            </div>
+            <p class="attempts">Intentos restantes: {{this.attempts}}/{{this.maxAttempts}}</p>
+            <div class="rowCards">
+                <div class="row">
+                    <img class="left-card" src="{{this.cardImage}}" alt="carta-izquierda"/>
+                </div>
+                <div class="row">
+                    <img class="right-card" src="{{this.rightCardImage}}" alt="carta-derecha"/>
+                </div>
+            </div>
+            <div class="btn-mayor-menor">
+                @if (this.activeGame) {
+                    <button class="btn-menor" (click)="playMayorMenor('menor')">Menor</button>
+                    <button class="btn-mayor" (click)="playMayorMenor('mayor')">Mayor</button>
+                }
+            </div>
+            <div class="statistics">
+                @if (this.activeGame) {
+                    <p [style.color]="this.resultColor" class="game-result">{{this.gameResultMessage}}</p>
+                    <h3 class="score">Puntos: {{this.score}}</h3>
+                }
+            </div>
+            <div class="start-game">
+                @if (!this.activeGame) {
+                    <h3 class="score">Puntos totales: {{this.score}}</h3>
+                    <button class="btn-restart" (click)="startGame()">{{this.startButtonText}}</button>
+                }
+            </div>
+        </div>
+</section>

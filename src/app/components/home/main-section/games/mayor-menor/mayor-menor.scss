@@ -1,0 +1,174 @@
+.mayor-menor-container {
+    font-family: "Poppins", sans-serif;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    min-height: 100vh;
+}
+  
+.score {
+    text-align: center;
+    color: #414581e6;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.game-result {
+    text-align: center;
+    color: #414581e6;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.attempts {
+    text-align: center;
+    color: #414581e6;
+    font-weight: bold;
+    font-size: x-large;
+}
+  
+.rowCards {
+    display: flex;
+    justify-content: center;
+}
+  
+.left-card {
+    width: 10rem;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+}
+  
+.right-card {
+    width: 10rem;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+}
+  
+.btn-mayor-menor {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.btn-menor {
+    padding: 1.3em 3em;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: rgb(255, 255, 255);
+    background-color: #58e95e;
+    border: none;
+    border-radius: 30px;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+}
+
+.btn-menor:hover {
+    background-color: #6efd73;
+    color: #fff;
+    transform: translateY(-7px);
+}
+  
+.btn-menor:active {
+    transform: translateY(-2px);
+}
+
+.btn-mayor {
+    padding: 1.3em 3em;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: white;
+    background-color: #9f6aa8;
+    border: none;
+    border-radius: 30px;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    margin-left: 1.5rem;
+}
+  
+.btn-mayor:hover {
+    background-color: #ca88d6;
+    color: #fff;
+    transform: translateY(-7px);
+}
+
+.btn-mayor:active {
+    transform: translateY(-2px);
+}
+  
+.btn-restart {
+    padding: 1.3em 3em;
+    padding-bottom: 20px;
+    font-size: 15px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #f9faff;
+    background: #6842ff;
+    border: none;
+    border-radius: 30px;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    display: block;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+}
+
+.btn-restart:hover {
+    color: #f9faff;
+    background: #7c5cfc;
+}
+
+.btn-restart:active {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    margin-top: 25px;
+    margin-left: 25px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    font-weight: 200;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #f9faff;
+    background: #6842ff;
+    border: none;
+    border-radius: 30px;
+}
+  
+.btn-primary:hover {
+    color: #f9faff;
+    background: #7c5cfc;
+}
+
+.img-mayor-menor {
+    width: 10rem;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 30px;
+}
+
+@media screen and (max-width: 480px) {
+    .left-card {
+      width: 9rem;
+    }
+    .right-card {
+      width: 9rem;
+    }
+}

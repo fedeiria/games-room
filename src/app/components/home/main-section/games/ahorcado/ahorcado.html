@@ -1,1 +1,31 @@
-<p>ahorcado works!</p>
+<section class="ahorcado-container">
+    <button class="btn btn-primary" (click)="backToHome()">Volver</button>
+    <div class="container game-container">
+        <div class="col">
+            <img class="img-ahorcado" src="{{this.gameCover}}" alt="ahorcado">
+        </div>
+        <p class="attempts">Intentos: {{this.attempts}}/{{this.maxAttempts}}</p>
+        <div class="container-general row">
+            <div class="col container-btn">
+                <div class="row word-guess">
+                    <div class="col-md-12 text-center">
+                        <div class="d-inline">
+                            @for (hyphen of hyphenatedWord; track $index) {
+                                <h1 class="d-inline p-2">{{hyphen}}</h1>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="keypad">
+                    @for (letter of buttonLetters; track $index) {
+                        <button class="word-btn" (click)="sendLetter(letter)" [disabled]="isDisabledLetter(letter)" [ngClass]="{ 'disabled-button': isDisabledLetter(letter) }">{{letter}}</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (!this.activeGame) {
+        <h3 class="selected-game-word">Palabra del juego: {{this.word}}</h3>
+        <button class="btn-restart" (click)="restartGame()">{{this.restartButtonText}}</button>
+    }
+</section>

@@ -16,7 +16,9 @@ export class Logins {
 
   // guarda el registro de conexion del usuario
   async saveLoginTimestamp(user_id: string): Promise<void> {
-    const { error } = await this.supabaseClient.from('logins').insert({ user_id: user_id, created_at: new Date() });
+    const { error } = await this.supabaseClient
+      .from('logins')
+      .insert({ user_id: user_id, created_at: new Date() });
 
     if (error) {
       console.log('database error: ', error);

@@ -34,7 +34,7 @@
     "@angular/router": "^20.2.2",
     "@ng-bootstrap/ng-bootstrap": "^19.0.1",
     "@popperjs/core": "^2.11.8",
-    "@supabase/supabase-js": "^2.56.0",
+    "@supabase/supabase-js": "^2.57.4",
     "bootstrap": "^5.3.8",
     "firebase": "^12.2.0",
     "rxjs": "~7.8.0",

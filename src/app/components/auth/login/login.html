@@ -3,10 +3,9 @@
 
         <!-- spinner -->
         @if (loading) {
-        <app-spinner />
+            <app-spinner />
         }
-
-        <!-- atributo inert deshabilita la interaccion con el form mientras el spinner esta activo -->
+        
         <div [attr.inert]="loading ? '' : null">
             <div class="row">
                 <div class="col-lg-7 mx-auto">
