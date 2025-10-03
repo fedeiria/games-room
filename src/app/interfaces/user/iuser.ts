@@ -5,5 +5,5 @@ export interface IUser {
     name: string;
     surname: string;
     email: string;
-    roleId: UserRole.User;
+    roleId: number;
 }

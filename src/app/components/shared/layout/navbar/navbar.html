@@ -5,9 +5,6 @@
             <span class="navbar-text">
                 Hola, {{ this.user?.name + ' ' + this.user?.surname }}
             </span>
-            <div class="navbar-text text-info fw-bold me-4">
-                Rol actual: {{ this.authState }}
-            </div>
             @switch (this.authState) {
                 @case (this.UserRole.Admin) {
                     <ul class="nav justify-content-center">
