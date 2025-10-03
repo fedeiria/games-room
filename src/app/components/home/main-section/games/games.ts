@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { IGameList } from '../../../../interfaces/game-list/igame-list';
+import { IGameList } from '../../../../interfaces/games/game-list/igame-list';
 
 @Component({
   selector: 'app-games',
@@ -11,7 +11,7 @@ import { IGameList } from '../../../../interfaces/game-list/igame-list';
 })
 export class Games {
 
-  protected readonly games: IGameList[] = [
+  public readonly games: IGameList[] = [
     {
       name: 'Ahorcado',
       description: 'Adivina la palabra oculta antes de que tu personaje termine ahorcado!',

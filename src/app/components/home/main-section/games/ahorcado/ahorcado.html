@@ -17,8 +17,8 @@
                     </div>
                 </div>
                 <div class="keypad">
-                    @for (letter of buttonLetters; track $index) {
-                        <button class="word-btn" (click)="sendLetter(letter)" [disabled]="isDisabledLetter(letter)" [ngClass]="{ 'disabled-button': isDisabledLetter(letter) }">{{letter}}</button>
+                    @for (letter of this.buttonLetters; track $index) {
+                        <button class="word-btn" (click)="this.sendLetter(letter)" [disabled]="this.isDisabledLetter(letter)" [ngClass]="{ 'disabled-button': this.isDisabledLetter(letter) }">{{letter}}</button>
                     }
                 </div>
             </div>
@@ -26,6 +26,6 @@
     </div>
     @if (!this.activeGame) {
         <h3 class="selected-game-word">Palabra del juego: {{this.word}}</h3>
-        <button class="btn-restart" (click)="restartGame()">{{this.restartButtonText}}</button>
+        <button class="btn-restart" (click)="this.restartGame()">{{this.restartButtonText}}</button>
     }
 </section>

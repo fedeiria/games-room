@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 import { UserRole } from '../../../../enums/user-role.enum';
 import { Auth } from '../../../../services/supabase/auth/auth';
 import { IUser } from '../../../../interfaces/user/iuser';
-import { Users } from '../../../../services/supabase/database/users/users';
+import { Users } from '../../../../services/users/users';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -12,51 +13,37 @@ import { Users } from '../../../../services/supabase/database/users/users';
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })
-export class Navbar implements OnInit {
+export class Navbar implements OnDestroy, OnInit {
 
   user: IUser | null = null;
   UserRole = UserRole;
   authState: UserRole = UserRole.Guess;
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private auth: Auth, private users: Users, private router: Router) { }
 
-  ngOnInit() {
-    this.getUserRole();
+  ngOnInit(): void {
+    this.subscriptions.add(
+        this.users.userRole$.subscribe(role => {
+        this.authState = role;
+      })
+    );
+    
+    this.subscriptions.add(
+      this.users.currentUser$.subscribe(user => {
+        this.user = user;
+      })
+    );
   }
 
-  // obtiene el role del usuario
-  async getUserRole(): Promise<void> {
-    try {
-      // obtengo los detalles del usuario logueado
-      const userDetails = await this.auth.currentUserDetails;
-
-      // obtengo el id del usuario logueado
-      const userId = userDetails.data.user?.id;
-
-      if (!userId) {
-        return;
-      }
-
-      // obtengo el role_id del usuario
-      const userData = await this.users.getUserData(userId);
-
-      if (!userData || userData.length === 0) {
-        return;
-      }
-
-      const user = userData[0];
-      this.user = user;
-      this.authState = user.role_id;
-    }
-    catch (error) {
-      console.error('Error al obtener el rol del usuario: ', error);
-    }
-  }
-
-  signOut(): void {
+  public signOut(): void {
     this.auth.signOut();
     this.router.navigate(['/login']);
     this.user = null;
     this.authState = UserRole.Guess;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

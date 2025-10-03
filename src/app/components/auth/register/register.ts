@@ -21,9 +21,9 @@ import { Users } from '../../../services/supabase/database/users/users';
 export class Register implements OnInit {
 
   private newUser!: IUser;
-  protected loading: boolean = false;
+  public loading: boolean = false;
 
-  protected registerForm!: FormGroup<{
+  public registerForm!: FormGroup<{
     email: FormControl<string>;
     name: FormControl<string>;
     surname: FormControl<string>;
@@ -84,7 +84,7 @@ export class Register implements OnInit {
     return this.registerForm.controls.repeatPassword;
   }
 
-  async onSubmit(): Promise<void> {
+  public async onSubmit(): Promise<void> {
     // muestro el spinner
     this.loading = true;
 

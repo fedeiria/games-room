@@ -5,6 +5,7 @@ import { Games } from '../../components/home/main-section/games/games';
 import { Ahorcado } from '../../components/home/main-section/games/ahorcado/ahorcado';
 import { MayorMenor } from '../../components/home/main-section/games/mayor-menor/mayor-menor';
 import { Preguntados } from '../../components/home/main-section/games/preguntados/preguntados';
+import { DesactivarBomba } from '../../components/home/main-section/games/desactivar-bomba/desactivar-bomba';
 
 const routes: Routes = [
   {
@@ -26,6 +27,11 @@ const routes: Routes = [
     path: 'preguntados',
     title: 'Preguntados',
     component: Preguntados
+  },
+  {
+    path: 'desactivar-bomba',
+    title: 'Desactivar la Bomba',
+    component: DesactivarBomba
   }
 ];
 

@@ -12,19 +12,18 @@ import { Dialogs } from '../../../../../services/messages/dialogs';
 })
 export class Ahorcado implements OnInit {
 
-  word: string = '';
-  attempts: number = 6;
-  maxAttempts: number = 6;
-  failedAttemps: number = 0;
-  victory: boolean = false;
-  activeGame: boolean = true;
-  hyphenatedWord: string[] = [];
-  disabledLetters: string[] = [];
-  gameTitle: string = 'AHORCADO';
-  restartButtonText: string = 'REINICIAR JUEGO';
-  gameCover: string = '../../../../../assets/images/games/ahorcado.png';
+  public word: string = '';
+  public attempts: number = 6;
+  public maxAttempts: number = 6;
+  public failedAttemps: number = 0;
+  private victory: boolean = false;
+  public activeGame: boolean = true;
+  public hyphenatedWord: string[] = [];
+  private disabledLetters: string[] = [];
+  public restartButtonText: string = 'REINICIAR JUEGO';
+  public gameCover: string = '../../../../../assets/images/game-cover/ahorcado.png';
   
-  buttonLetters: string[] = [
+  public buttonLetters: string[] = [
     'A',
     'B',
     'C',
@@ -54,7 +53,7 @@ export class Ahorcado implements OnInit {
     'Z',
   ];
   
-  wordList: string[] = [
+  private wordList: string[] = [
     'PATRIA',
     'ESPESOR',
     'MANTRA',
@@ -84,7 +83,7 @@ export class Ahorcado implements OnInit {
     this.hyphenatedWord = Array(this.word.length).fill('_');
   }
 
-  restartGame() {
+  public restartGame(): void {
     this.attempts = 6;
     this.failedAttemps = 0;
     this.victory = false;
@@ -95,11 +94,11 @@ export class Ahorcado implements OnInit {
   }
 
   // Verifica si la letra seleccionada está en el array de letras deshabilitadas
-  isDisabledLetter(letter: string): boolean {
+  public isDisabledLetter(letter: string): boolean {
     return this.disabledLetters.includes(letter);
   }
 
-  sendLetter(letter: string) {
+  public sendLetter(letter: string): void {
     let winGame: boolean = false;
     let letterFlag: boolean = false;
 
@@ -161,7 +160,7 @@ export class Ahorcado implements OnInit {
   }
 
   // guardo los datos de la partida
-  async saveResultData() {
+  private async saveResultData(): Promise<void> {
     try {
       await this.scores.setScore({
         gameId: 1,
@@ -171,14 +170,14 @@ export class Ahorcado implements OnInit {
     catch (error) {
       this.dialogs.showDialogMessage({
         title: 'Games Room',
-        content: 'Ocurrio un error al guardar el puntaje.'
+        content: 'Ocurrio un error al guardar los datos de la partida.'
       });
 
       console.error('[mayor-menor.ts] saveResultData error:', error);
     }
   }
   
-  backToHome() {
+  public backToHome(): void {
     this.router.navigate(['/home']);
   }
 }

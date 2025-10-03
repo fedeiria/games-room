@@ -17,9 +17,9 @@ import { Logins } from '../../../services/supabase/database/logins/logins';
 })
 export class Login implements OnInit {
 
-  protected loading: boolean = false;
+  public loading: boolean = false;
 
-  protected loginForm!: FormGroup<{
+  public loginForm!: FormGroup<{
     email: FormControl<string>;
     password: FormControl<string>;
   }>;
@@ -50,7 +50,7 @@ export class Login implements OnInit {
     return this.loginForm.controls.password;
   }
 
-  async onSubmit(): Promise<void> {
+  public async onSubmit(): Promise<void> {
     // muestro el spinner
     this.loading = true;
     

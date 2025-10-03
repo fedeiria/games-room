@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { IGameList } from '../../../../interfaces/game-list/igame-list';
+import { IGameList } from '../../../../interfaces/games/game-list/igame-list';
 import { GameList } from './game-list/game-list';
 
 @Component({

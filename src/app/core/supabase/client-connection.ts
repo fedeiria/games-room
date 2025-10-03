@@ -11,7 +11,7 @@ export function createSupabaseClientConnection(): SupabaseClient {
             environment.supabaseConfig.supabaseKey,
             {
                 auth: {
-                    autoRefreshToken: true,
+                    autoRefreshToken: false,
                     persistSession: true
                 },
             }

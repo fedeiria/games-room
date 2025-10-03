@@ -1,0 +1,189 @@
+.active-game {
+    text-align: center;
+}
+
+.attempts {
+    text-align: center;
+    color: #414581e6;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+.btn-deactivate {
+    border: none;
+    cursor: pointer;
+    background: url('../../../../../../assets/images/games/desactivar-bomba/deactivate-bomb-button.jpg');
+    background-size: contain;
+    background-position: center;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    transition: transform 0.2s ease;
+}
+
+.btn-deactivate:hover {
+    // Muevo hacia arriba
+    transform: translateY(-3px);
+}
+
+.btn-deactivate:active {
+    // Muevo hacia abajo
+    transform: translateY(0px);
+}
+
+.btn-primary {
+    margin-top: 25px;
+    margin-left: 25px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    font-weight: 200;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #f9faff;
+    background: #6842ff;
+    border: none;
+    border-radius: 30px;
+}
+
+.btn-primary:hover {
+    color: #f9faff;
+    background: #7c5cfc;
+}
+
+.btn-start {
+    padding: 1.3em 3em;
+    padding-bottom: 20px;
+    font-size: 15px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #f9faff;
+    background: #6842ff;
+    border: none;
+    border-radius: 30px;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    display: block;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+}
+
+.btn-start:hover {
+    color: #f9faff;
+    background: #7c5cfc;
+}
+
+.btn-start:active {
+    transform: translateY(-1px);
+}
+
+.btn-attempts {
+    color: #f9faff;
+    display: inline-flex;
+    background: #6842ff;
+    font-size: 1.5rem;
+    cursor: text;
+    padding: 10px 15px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 1px;
+}
+
+.code-entry-area {
+    position: relative;
+    width: 250px;
+    margin: 1rem auto;
+}
+
+.code-visual-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 2.5rem;
+    font-family: monospace;
+    letter-spacing: 0.5em;
+    color: dark;
+    padding: 1.3em 3em;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.desactivar-bomba-container {
+    font-family: "Poppins", sans-serif;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    min-height: 100vh;
+}
+
+.game-result {
+    text-align: center;
+    color: #414581e6;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.img-desactivar-bomba {
+    width: 10rem;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 30px;
+}
+
+.input-code-overlay {
+    position: absolute;
+    opacity: 0;
+    cursor: text;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: #414581e6;
+    caret-color: black;
+    background-color: transparent !important;
+    border: 2px solid transparent !important;
+    z-index: 10;
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bolder;
+}
+
+.input-code-overlay::-webkit-outer-spin-button,
+.input-code-overlay::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.attempts-container {
+    text-align: center;
+}
+
+.time-remaining {
+    margin-top: 0;
+    font-family: Roboto;
+    font-size: x-large;
+    text-align: center;
+}
+
+@media screen and (max-width: 480px) {
+    .img-desactivar-bomba {
+        margin-top: 20px;
+    }
+
+    .btn-deactivate {
+        margin-top: 20px;
+        margin-left: 0;
+    }
+}

@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
-import { AuthError, AuthResponse, AuthSession, AuthTokenResponsePassword, SupabaseClient, UserResponse } from '@supabase/supabase-js';
+import { Injectable, NgZone } from '@angular/core';
+import { AuthError, AuthResponse, AuthTokenResponsePassword, SupabaseClient, UserResponse } from '@supabase/supabase-js';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { createSupabaseClientConnection } from '../../../core/supabase/client-connection';
 
@@ -7,11 +8,13 @@ import { createSupabaseClientConnection } from '../../../core/supabase/client-co
   providedIn: 'root'
 })
 export class Auth {
-  private session: AuthSession | null = null;
-  private readonly supabaseClient: SupabaseClient;
 
-  constructor() {
-    this.supabaseClient = createSupabaseClientConnection();
+  private readonly supabaseClient: SupabaseClient = createSupabaseClientConnection();
+  private readonly userDetailsSubject = new BehaviorSubject<UserResponse | null>(null);
+  public readonly observableUserDetails$: Observable<UserResponse | null> = this.userDetailsSubject.asObservable();
+
+  constructor(private ngZone: NgZone) {
+    this.initAuthStateChanges();
   }
 
   // registro
@@ -19,17 +22,24 @@ export class Auth {
     return this.supabaseClient.auth.signUp({ email, password });
   }
 
-  // ingreso
+  // login
   signInWithEmailAndPassword(email: string, password: string): Promise<AuthTokenResponsePassword> {
     return this.supabaseClient.auth.signInWithPassword({ email, password });
   }
 
-  // obtiene los datos de sesion del usuario
-  get sessionUserData(): AuthSession | null {
-    this.supabaseClient.auth.getSession().then(({ data }) => {
-      this.session = data.session;
+  // listener para escuchar cambios en el estado de autenticacion de un usuario
+  private initAuthStateChanges(): void {
+    this.supabaseClient.auth.onAuthStateChange(async (event, session) => {
+      this.ngZone.run(async () => {
+        if (session) {
+          const userDetails = await this.currentUserDetails;
+          this.userDetailsSubject.next(userDetails);
+        }
+        else {
+          this.userDetailsSubject.next(null);
+        }
+      });
     });
-    return this.session;
   }
 
   // obtiene los detalles de los datos del usuario

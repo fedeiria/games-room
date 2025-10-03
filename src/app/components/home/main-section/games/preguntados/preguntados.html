@@ -1,1 +1,53 @@
-<p>preguntados works!</p>
+<section class="preguntados-container">
+    <button class="btn btn-primary" (click)="this.backToHome()">
+        Volver
+    </button>
+    <div class="container d-flex flex-column justify-content-center">
+        <div class="col">
+            <img class="img-preguntados" src="{{this.gameCover}}" alt="preguntados">
+        </div>
+        <div class="score-container">
+            <button class="btn-score">
+                Puntuación: {{this.score}} - Intentos: {{this.attempts}}/{{this.maxAttempts}}
+            </button>
+        </div>
+        <div class="row">
+            <div class="answer-container">
+                @if (!this.gameOver) {
+                    @if (this.currentQuestion) {
+                        <h3>¿De qué país es la bandera?</h3>
+                        <div class="flag-container">
+                            <img src="{{this.currentQuestion.flag}}" alt="bandera a adivinar" />
+                        </div>
+                        <div class="active-game">
+                            @for (option of this.currentQuestion.options; track $index) {
+                                <button class="btn-options" (click)="this.playGame(option)"
+                                    [disabled]="this.currentQuestion.isAnswered"
+                                    [ngClass]="{
+                                        'selected': option === this.currentQuestion.selectedOption,
+                                        'correct-answer': this.currentQuestion.isAnswered && option === currentQuestion.answer,
+                                        'incorrect-answer': this.currentQuestion.isAnswered && option !== this.currentQuestion.selectedOption && option !== this.currentQuestion.answer
+                                    }">
+                                    {{option}}
+                                </button>
+                            }
+                        </div>
+                    }
+                    @else {
+                        <div class="loading-state-container">
+                            <p>Cargando pregunta...</p>
+                        </div>
+                        
+                    }
+                }
+                @else {
+                    <div class="restart-game">
+                        <button class="btn-restart" (click)="this.resetValues()">
+                            {{this.restartButtonText}}
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>

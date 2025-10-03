@@ -1,41 +1,7 @@
+/* --- BASE STYLES & LAYOUT --- */
+
 * {
   box-sizing: border-box;
-}
-
-.btn-chat {
-  padding: 8px 12px;
-  font-size: 14px;
-  width: auto;
-  border-radius: 5px;
-  margin: 1px 1px 1px 12px;
-  display: block;
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.btn-chat:hover,
-.btn-chat:active {
-  transform: translateY(-1px);
-  color: rgba(33, 34, 51, 0.9);
-}
-
-.card-header,
-.card-footer {
-  background-color: rgba(33, 34, 51, 0.9);
-  color: white;
-}
-
-.card-footer {
-  display: flex;
-}
-
-.card-header {
-  font-weight: bold;
-}
-
-.card-body {
-  padding: 0.5rem;
-  background-size: cover;
-  background-position: center;
 }
 
 .chat-container {
@@ -43,77 +9,22 @@
   bottom: 20px;
   right: 20px;
   z-index: 9999;
-  width: 300px;
   max-height: 500px;
-}
-
-.chat-controls {
-  text-align: right;
+  display: flex;
+  flex-direction: column;
 }
 
 .container-card {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   border-radius: 8px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.date {
-  font-size: 0.6rem;
-  color: rgba(33, 34, 51, 0.9);
-  text-align: right;
-  float: right;
-}
-
-.message-container {
-  max-height: 300px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 10px;
-  background-color: #f8f9fa;
-  scrollbar-width: thin;
-  scrollbar-color: #ccc transparent;
-}
-
-.messages {
-  display: block;
-  padding: 8px;
-  border-radius: 8px;
-  max-width: 80%;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
-  box-sizing: border-box;
-}
-
-.message-box {
-  display: block;
-  padding: 1.5rem;
-  border-radius: 8px;
-  max-width: 80%;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
-  box-sizing: border-box;
-  margin-bottom: 8px;
-}
-
-.messages span {
-  display: block;
-}
-
-.message-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.message-container::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 3px;
-}
-
+/* Minimized State */
 .minimized-chat {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -123,43 +34,22 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  
+  .card-header {
+    padding: 0;
+  }
 }
 
-.my-message {
-  background-color: #99a1a9;
-  text-align: right;
-  margin-left: auto;
-  padding-top: 1rem;
-  color: whitesmoke;
+/* Toggle Header */
+.card-header {
+  background-color: rgba(33, 34, 51, 0.9);
+  color: white;
+  font-weight: bold;
+  padding: 10px 15px;
+  flex-shrink: 0;
 }
 
-.other-messages {
-  background-color: #25588a;
-  text-align: left;
-  margin-right: auto;
-  padding-top: 1rem;
-  color: whitesmoke;
-}
-
-.form-control,
-input[type="text"] {
-  width: 100%;
-  padding: 12px 3px;
-  font-size: 18px;
-  border: 2px solid #ccc;
-  border-radius: 6px;
-  background-color: #f8f8f8;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.form-control:focus,
-input[type="text"]:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
-  background-color: #fff;
-}
-
+/* Animation */
 .view-from-right {
   animation: viewFromRight 0.5s ease-in-out;
 }
@@ -176,25 +66,168 @@ input[type="text"]:focus {
   }
 }
 
+/* --- MESSAGE AREA --- */
+.card-body {
+  padding: 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.message-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-height: 380px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+  background-color: #f8f9fa;
+  
+  /* Scrollbar Styles */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+  }
+}
+
+.message-box {
+  padding: 8px 12px;
+  border-radius: 8px;
+  max-width: 75%;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.message-box span {
+  display: block;
+}
+
+.sender-email {
+  font-weight: bold;
+  font-size: 0.8rem;
+  opacity: 0.9;
+  margin-bottom: 2px;
+}
+
+/* --- MESSAGE THEMES (CONTRAST IMPROVED) --- */
+.message-content {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+    display: block;
+}
+
+.my-message {
+  background-color: #007bff;
+  color: white;
+  margin-left: auto;
+  text-align: left;
+
+  .date {
+    color: rgba(255, 255, 255, 0.8);
+  }
+  .sender-email {
+      color: rgba(255, 255, 255, 0.95);
+  }
+}
+
+.other-messages {
+  background-color: #e9ecef;
+  color: #333;
+  text-align: left;
+  
+  .date {
+    color: rgba(0, 0, 0, 0.6);
+  }
+  .sender-email {
+      color: #007bff;
+  }
+}
+
+.date {
+  font-size: 0.65rem;
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* --- INPUT FOOTER --- */
+.card-footer {
+  background-color: rgba(33, 34, 51, 0.9);
+  padding: 10px 15px;
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.form-control,
+input[type="text"] {
+  flex-grow: 1;
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  background-color: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.form-control:focus,
+input[type="text"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  background-color: #fff;
+}
+
+.btn-chat {
+  flex-shrink: 0;
+  padding: 10px 15px;
+  font-size: 14px;
+  width: auto;
+  border-radius: 8px;
+  background-color: #5231d7;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  
+  &:hover {
+    background-color: #6842ff;
+    transform: translateY(-1px);
+  }
+  
+  &:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+/* --- RESPONSIVE --- */
 @media screen and (max-width: 768px) {
   .chat-container {
     width: 90vw;
     right: 5vw;
     bottom: 10px;
-    max-height: 80vh;
+    max-height: 85vh;
   }
 
   .message-container {
-    max-height: 50vh;
+    max-height: 70vh;
   }
 
   .card-footer {
-    flex-direction: column;
-    gap: 10px;
+    gap: 8px;
   }
-
+  
   .btn-chat {
-    width: 100%;
+      padding: 10px 12px;
   }
 }
 
@@ -203,14 +236,15 @@ input[type="text"]:focus {
     width: 95vw;
     right: 2.5vw;
     bottom: 5px;
-    max-height: 85vh;
-  }
-
-  .message-container {
-    height: 60vh;
+    max-height: 90vh;
   }
 
   .card-footer {
     flex-direction: column;
+    gap: 8px;
+  }
+  
+  .btn-chat {
+    width: 100%;
   }
 }

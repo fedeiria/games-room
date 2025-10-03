@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { filter, Observable, Subscription, switchMap, tap } from 'rxjs';
 
-import { Observable, tap } from 'rxjs';
-import { IChatMessage } from '../../../../interfaces/chat-room/ichat-message';
 import { Auth } from '../../../../services/supabase/auth/auth';
 import { ChatRoom } from '../../../../services/supabase/database/chat-room/chat-room';
-import { UserResponse } from '@supabase/supabase-js';
+import { IChatMessage } from '../../../../interfaces/chat-room/ichat-message';
+import { Users } from '../../../../services/users/users';
 
 @Component({
   selector: 'app-chat',
@@ -14,50 +14,42 @@ import { UserResponse } from '@supabase/supabase-js';
   templateUrl: './chat.html',
   styleUrl: './chat.scss'
 })
-export class Chat implements AfterViewInit, OnInit {
+export class Chat implements AfterViewInit, OnDestroy, OnInit {
 
-  protected messages$!: Observable<IChatMessage[]>;
-  protected emailMap$!: Observable<Map<string, string>>;
-  protected ready$!: Observable<boolean>;
+  private authSubscription!: Subscription;
 
-  protected userDetails!: UserResponse;
-  protected isChatVisible: boolean = false;
-  protected newMessage: string = '';
-  protected userId: string | undefined = '';
-  protected userEmail: string | undefined = '';
-
+  public newMessage: string = '';
+  public messages$!: Observable<IChatMessage[]>;
+  
+  public userId: string | null = null;
+  public userEmail: string | null = null;
+  public isChatVisible: boolean = false;
+  
   @ViewChild('messageContainer') private messageContainer!: ElementRef<HTMLDivElement>;
   
-  constructor(private auth: Auth, private chatRoom: ChatRoom) { }
+  constructor(private auth: Auth, private chatRoom: ChatRoom, private users: Users) { }
 
   async ngOnInit() {
-    await this.getUserCredentials();
+    this.authSubscription = this.auth.observableUserDetails$.subscribe(userDetails => {
+      this.userId = userDetails?.data?.user?.id ?? null;
+      this.userEmail = userDetails?.data.user?.email ?? null;
+    });
 
-    this.messages$ = this.chatRoom.observableMessages$.pipe(
-      tap(() => queueMicrotask(() => this.scrollToBottom()))
+    this.messages$ = this.auth.observableUserDetails$.pipe(
+      filter(userDetails => !!userDetails?.data.user?.id),
+      switchMap(userDetails => {
+        return this.chatRoom.observableMessages$;
+      }),
+      tap(() => setTimeout(() => this.scrollToBottom(), 0))
     );
-
-    this.emailMap$ = this.chatRoom.observableEmails$;
-    this.ready$ = this.chatRoom.observableChannelReady$;
-  }
-
-  // obtengo las credenciales del usuario logueado
-  async getUserCredentials(): Promise<void> {
-    try {
-      this.userDetails = await this.auth.currentUserDetails;
-      this.userEmail = this.userDetails?.data?.user?.email ?? undefined;
-      this.userId = this.userDetails.data.user?.id ?? undefined;
-    }
-    catch(error) {
-      // quitar el console.log y agregar un toast para mostrar al usuario
-      console.error('Ocurrio un error al obtener los datos del usuario: ', error);
-    }
   }
 
   // posteo el mensaje y lo guardo en chat_room
-  async sendMessage(): Promise<void> {
-    await this.chatRoom.sendMessage(this.newMessage);
-    this.newMessage = '';
+  private async sendMessage(): Promise<void> {
+    if (this.userId && this.userEmail && this.newMessage.trim()) {
+      await this.chatRoom.sendMessage(this.newMessage, this.userId, this.userEmail);
+      this.newMessage = '';
+    }
   }
 
   // scroll inicial al inicializar el componente
@@ -73,11 +65,11 @@ export class Chat implements AfterViewInit, OnInit {
       return;
     }
 
-    container.scrollTo({ top: container.scrollHeight, behavior: 'auto' });
+    container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
   }
 
   // muestra / oculta la ventana de chat
-  toggleChatVisibility(): void {
+  public toggleChatVisibility(): void {
     this.isChatVisible = !this.isChatVisible;
 
     if (this.isChatVisible) {
@@ -86,8 +78,15 @@ export class Chat implements AfterViewInit, OnInit {
   }
 
   // submit del form
-  onSubmit(event: Event): void {
+  public onSubmit(event: Event): void {
     event.preventDefault();
     this.sendMessage();
+  }
+
+  // seek & destroy!
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 }

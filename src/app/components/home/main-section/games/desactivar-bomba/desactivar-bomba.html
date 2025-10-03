@@ -1,0 +1,39 @@
+<section class="desactivar-bomba-container">
+    <button class="btn btn-primary" (click)="this.backToHome()">
+        Volver
+    </button>
+    <div class="container d-flex flex-column align-items-center justify-content-center h-100">
+        <div class="row">
+            <img class="img-desactivar-bomba" [src]="this.gameCover" alt="desactivar la bomba"/>
+        </div>
+        @if (this.activeGame || this.gameOver) {
+            <div class="attempts-container">
+                <button class="btn-attempts" disabled>
+                    Intentos: {{ this.attempts }}
+                </button>
+            </div>
+            <p class="time-remaining" [class.text-danger]="this.timeRemaining <= 10 && this.activeGame">
+                TIEMPO RESTANTE: {{ this.timeRemaining }} / {{ this.totalTime }}
+            </p>
+        }
+        @if (!this.activeGame) {
+            <div class="start-game">
+                <h3 class="game-result">{{ this.gameResultMessage }}</h3>
+                <button class="btn-start" (click)="this.startGame()">
+                    {{ this.startButtonText }}
+                </button>
+            </div>
+        }
+        <div class="active-game">
+            @if (this.activeGame) {
+                <div class="code-entry-area">
+                    <div class="code-visual-display">
+                        {{ this.inputValue || this.hyphenatedWord.join(' ') }}
+                    </div>
+                    <input class="input-code-overlay" type="tel" placeholder="" [style.backgroundColor]="'transparent'" [(ngModel)]="this.inputValue" min="100" max="999" maxlength="3"/>
+                </div>
+                 <button class="btn-deactivate" (click)="this.deactivateBomb()" [disabled]="!this.inputValue"></button>
+            }
+        </div>
+    </div>
+</section>
