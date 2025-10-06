@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { filter, Observable, Subscription, switchMap, tap } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { Auth } from '../../../../services/supabase/auth/auth';
 import { ChatRoom } from '../../../../services/supabase/database/chat-room/chat-room';
 import { IChatMessage } from '../../../../interfaces/chat-room/ichat-message';
-import { Users } from '../../../../services/users/users';
 
 @Component({
   selector: 'app-chat',
@@ -14,58 +13,58 @@ import { Users } from '../../../../services/users/users';
   templateUrl: './chat.html',
   styleUrl: './chat.scss'
 })
-export class Chat implements AfterViewInit, OnDestroy, OnInit {
-
-  private authSubscription!: Subscription;
+export class Chat implements OnDestroy, OnInit {
 
   public newMessage: string = '';
-  public messages$!: Observable<IChatMessage[]>;
-  
-  public userId: string | null = null;
-  public userEmail: string | null = null;
-  public isChatVisible: boolean = false;
-  
-  @ViewChild('messageContainer') private messageContainer!: ElementRef<HTMLDivElement>;
-  
-  constructor(private auth: Auth, private chatRoom: ChatRoom, private users: Users) { }
+  public messages: IChatMessage[] = [];
 
-  async ngOnInit() {
-    this.authSubscription = this.auth.observableUserDetails$.subscribe(userDetails => {
-      this.userId = userDetails?.data?.user?.id ?? null;
-      this.userEmail = userDetails?.data.user?.email ?? null;
+  public currentUserId: string | null = null;
+  public currentUserEmail: string | null = null;
+
+  private messagesSubscription: Subscription | undefined;
+  private userSubscription: Subscription | undefined;
+
+  public isChatVisible: boolean = false;
+
+  @ViewChild('messageContainer') private messageContainerRef!: ElementRef<HTMLDivElement>;
+
+  constructor(private auth: Auth, private chatRoom: ChatRoom) { }
+
+  ngOnInit() {
+    this.messagesSubscription = this.chatRoom.observableMessages$.subscribe(messages => {
+      this.messages = messages;
+
+      setTimeout(() => {
+        this.scrollToBottom()
+      }, 50);
     });
 
-    this.messages$ = this.auth.observableUserDetails$.pipe(
-      filter(userDetails => !!userDetails?.data.user?.id),
-      switchMap(userDetails => {
-        return this.chatRoom.observableMessages$;
-      }),
-      tap(() => setTimeout(() => this.scrollToBottom(), 0))
-    );
+    this.userSubscription = this.auth.observableUserDetails$.subscribe(userDetails => {
+      const user = userDetails?.data.user;
+
+      this.currentUserId = user?.id ?? null;
+      this.currentUserEmail = user?.email ?? null;
+    });
   }
 
-  // posteo el mensaje y lo guardo en chat_room
-  private async sendMessage(): Promise<void> {
-    if (this.userId && this.userEmail && this.newMessage.trim()) {
-      await this.chatRoom.sendMessage(this.newMessage, this.userId, this.userEmail);
+  // envio el mensaje al chat
+  public async sendMessage(): Promise<void> {
+    if (this.newMessage.trim()) {
+      await this.chatRoom.sendMessage(this.newMessage.trim());
       this.newMessage = '';
     }
   }
 
-  // scroll inicial al inicializar el componente
-  ngAfterViewInit(): void {
-    this.scrollToBottom();
-  }
-
   // lleva el scroll de la ventana del chat hacia abajo
   private scrollToBottom(): void {
-    const container = this.messageContainer?.nativeElement;
-
-    if (!container) {
-      return;
+    if (this.messageContainerRef) {
+      try {
+        this.messageContainerRef.nativeElement.scrollTo({ top: this.messageContainerRef.nativeElement.scrollHeight, behavior: 'smooth' });
+      }
+      catch (error) {
+        console.log('error de scroll');
+      }
     }
-
-    container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
   }
 
   // muestra / oculta la ventana de chat
@@ -73,7 +72,9 @@ export class Chat implements AfterViewInit, OnDestroy, OnInit {
     this.isChatVisible = !this.isChatVisible;
 
     if (this.isChatVisible) {
-      this.scrollToBottom();
+      setTimeout(() => {
+        this.scrollToBottom()
+      }, 50);
     }
   }
 
@@ -85,8 +86,7 @@ export class Chat implements AfterViewInit, OnDestroy, OnInit {
 
   // seek & destroy!
   ngOnDestroy(): void {
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
+    this.messagesSubscription?.unsubscribe();
+    this.userSubscription?.unsubscribe();
   }
 }

@@ -120,15 +120,6 @@ export class Preguntados implements OnDestroy, OnInit {
     }, 3000);
   }
 
-  // restaura los colores de los botones de las opciones
-  public resetButtonState(btnCollection: any): void {
-    for (let i = 0; i < btnCollection.length; i++) {
-      btnCollection[i].style.backgroundColor = '';
-      btnCollection[i].style.color = '';
-      btnCollection[i].disabled = false;
-    }
-  }
-
   // reinicia los valores a su estado inicial
   public resetValues(): void {
     this.score = 0;
@@ -148,9 +139,7 @@ export class Preguntados implements OnDestroy, OnInit {
       this.currentIndex++;
 
       this.currentQuestion = {
-        ...this.questionList[this.currentIndex],
-        isAnswered: false,
-        selectedOption: null
+        ...this.questionList[this.currentIndex]
       };
     }
     else {

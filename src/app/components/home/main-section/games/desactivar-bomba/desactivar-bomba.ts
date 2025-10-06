@@ -1,4 +1,4 @@
-import { Component, ɵsetAllowDuplicateNgModuleIdsForTest } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Dialogs } from '../../../../../services/messages/dialogs';
@@ -17,17 +17,28 @@ export class DesactivarBomba {
   public hyphenatedWord: string[] = []
 
   public attempts: number = 0;
-  public inputValue: number = 0;
-  public totalTime: number = 60;
+  public inputValue: number | null = null;
+  public firstDigit: number = 0;
+  public totalTime: number = 120;
   public timeRemaining: number = 0;
   public codeDeactivateBomb: number = 0;
+
+  public cableColors: string[] = ['red', 'green', 'blue'];
+  public correctCable: string = '';
+  public selectedCable: string | null = null;
+  public cutCable: string = '';
+  public isCableCut: boolean = false;
+
+  public hintMessage: string = '';
+  public hintUsed: boolean = false;
+  public lastGuess: number | null = null;
 
   private victory: boolean = false;
   public gameOver: boolean = true;
   public activeGame: boolean = false;
 
   public resultColor: string = '';
-  public gameResultMessage: string = 'Listo para comenzar la desactivacion';
+  public gameResultMessage: string = '';
   private initialColorCode: string = 'white';
   private colorCodeIncorrect: string = 'red';
   public startButtonText: string = 'Comenzar Juego';
@@ -37,6 +48,7 @@ export class DesactivarBomba {
 
   constructor(private dialogs: Dialogs, private router: Router, private scores: Scores) { }
 
+  // contador de tiempo
   private startTimer(): void {
     if (this.interval) {
       this.resultColor = this.initialColorCode;
@@ -52,32 +64,47 @@ export class DesactivarBomba {
     }, 1000);
   }
 
+  // llama a inicializar los valores y el contador del tiempo
   public startGame(): void {
     this.loadInitialValues();
     this.startTimer();
   }
 
+  // al intentar desactivar la bomba
   public deactivateBomb(): void {
     console.log("Codigo de desactivacion: ", this.codeDeactivateBomb);
-    if (!this.activeGame) return;
+
+    // si se adivina el cable se cortan los intentos
+    if (!this.activeGame || this.isCableCut) return;
+
+    if (!this.inputValue) return;
 
     const inputAsNumber = parseInt(this.inputValue.toString(), 10);
+    this.lastGuess = inputAsNumber;
+    this.attempts++;
 
     if (inputAsNumber === this.codeDeactivateBomb) {
-      this.attempts++;
-      this.handleGameOver(true);
+      this.resultColor = 'green';
     }
     else {
+      if (inputAsNumber < this.codeDeactivateBomb) { 
+        this.gameResultMessage = 'El código es MAYOR al número ingresado.';
+      }
+      else {
+        this.gameResultMessage = 'El código es MENOR al número ingresado.';
+      }
+
       setTimeout(() => {
         this.resultColor = this.initialColorCode;
       }, 2000);
-      this.attempts++;
+
       this.inputValue = 0;
       this.resultColor = this.colorCodeIncorrect;
     }
   }
 
-  handleGameOver(isVictory: boolean) {
+  // verifica si el juego ha finalizado
+  private handleGameOver(isVictory: boolean): void {
     if (this.interval) {
       clearInterval(this.interval);
     }
@@ -93,6 +120,122 @@ export class DesactivarBomba {
     }
 
     this.saveResultData();
+  }
+
+  // inicializa valores
+  private loadInitialValues(): void {
+    this.attempts = 0;
+    this.inputValue = null;
+    this.activeGame = true;
+    this.gameOver = false;
+    this.isCableCut = false;
+    this.selectedCable = null;
+    this.lastGuess = null;
+    this.timeRemaining = 120;
+    this.gameResultMessage = '';
+
+    // genero el codigo para desactivar la bomba
+    this.codeDeactivateBomb = Math.floor(Math.random() * 900) + 100;
+
+    // obtengo el primer digito
+    this.firstDigit = Math.floor(this.codeDeactivateBomb / 100);
+
+    this.hintUsed = false;
+
+    // selecciono el cable correcto para desactivar la bomba
+    this.correctCable = this.cableColors[Math.floor(Math.random() * this.cableColors.length)];
+
+    // asigno las pistas
+    this.hintMessage = this.generateCableHint();
+
+    this.hyphenatedWord = Array(3).fill('_');
+    this.startButtonText = 'Reiniciar Juego';
+    this.resultColor = this.initialColorCode;
+    this.gameCover = '../../../../../assets/images/game-cover/bomba.png';
+  }
+
+  // genero las pistas del cable
+  private generateCableHint(): string {
+    const code = this.codeDeactivateBomb;
+
+    if (code % 2 === 0) {
+      this.correctCable = 'red';
+      return `PISTA CABLE: El cable correcto está asociado a un código PAR.`;
+    }
+    else if (code < 400) {
+      this.correctCable = 'blue';
+      return `PISTA CABLE: El codigo es menor a 400.`;
+    }
+    else {
+      this.correctCable = 'green'
+      return `PISTA CABLE: El codigo correcto es IMPAR y MAYOR a 400.`;
+    }
+  }
+
+  public cutCableAttempt(): void {
+    // solo permito un intento de corte de cable por partida
+    if (!this.activeGame || this.isCableCut || this.selectedCable === null) return;
+
+    const colorToCut = this.selectedCable;
+
+    this.cutCable = colorToCut;
+    this.isCableCut = true; // cable cortado
+
+    const isCodeCorrect = (this.lastGuess === this.codeDeactivateBomb);
+    const isCableCorrect = (colorToCut === this.correctCable);
+
+    // verifico condicion de victoria
+    if (isCableCorrect && isCodeCorrect) {
+      this.handleGameOver(true);
+    }
+    // falla el codigo
+    else if (!isCodeCorrect) {
+      this.gameResultMessage = `¡BOMBA! Código INCORRECTO: ${this.lastGuess}. Cable cortado: ${this.cutCable}`;
+      this.handleGameOver(false);
+    }
+    // codigo correcto pero cable incorrecto
+    else {
+      this.gameResultMessage = 'Codigo correcto pero ¡CABLE INCORRECTO!';
+      this.handleGameOver(false);
+    }
+  }
+
+  // llamo al pasar por encima del cable
+  public hoverCable(color: string): void {
+    if (!this.activeGame || this.isCableCut) return;
+    this.selectedCable = color;
+  }
+
+  // llamo al sacar el mouse del cable
+  public unhoverCable(): void {
+    this.selectedCable = null;
+  }
+
+  // si el usuario usa la pista numerica
+  public useHint(): void {
+    if (!this.activeGame || this.hintUsed) return;
+
+    this.hintUsed = true;
+    this.inputValue = this.firstDigit;
+    this.gameResultMessage = `PISTA USADA: El código empieza con ${this.firstDigit}.`;
+    this.resultColor = 'yellow';
+  }
+
+  // convierto el contador a mm:ss
+  public get digitalTime(): string {
+    const totalSeconds = this.timeRemaining;
+
+    if (totalSeconds < 0) return '00:00';
+
+    // calculo minutos y segundos
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    // uso padStart para formatear el numero si es menor a 10
+    const formattedMinutes = String(minutes).padStart(2, '0');
+    const formattedSeconds = String(seconds).padStart(2, '0');
+
+    return `${formattedMinutes}:${formattedSeconds}`;
   }
 
   // guardo los datos de la partida
@@ -112,18 +255,6 @@ export class DesactivarBomba {
 
       console.error('[desactivar-bomba.ts] saveResultData error:', error);
     }
-  }
-
-  private loadInitialValues(): void {
-    this.attempts = 0;
-    this.inputValue = 0;
-    this.activeGame = true;
-    this.timeRemaining = 60;
-    this.codeDeactivateBomb = Math.floor(Math.random() * 900) + 100;
-    this.hyphenatedWord = Array(3).fill('_');
-    this.startButtonText = 'Reiniciar Juego';
-    this.resultColor = this.initialColorCode;
-    this.gameCover = '../../../../../assets/images/game-cover/bomba.png';
   }
 
   public backToHome(): void {

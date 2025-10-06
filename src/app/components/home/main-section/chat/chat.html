@@ -13,16 +13,14 @@
         <!-- Chat Messages -->
         <div class="card-body">
             <div #messageContainer class="message-container" id="message-container" role="log" aria-live="polite">
-                @if (this.messages$ | async; as messages) {
-                    @for (message of messages; track message.id) {
-                    <p class="message-box messages"
-                        [class.my-message]="message.userId === this.userId"
-                        [class.other-messages]="message.userId !== this.userId">
-                        <span class="sender-email">{{ message.userEmail }}</span>
-                        <span class="message-content">{{ message.content }}</span>
-                        <span class="date">{{ message.createdAt | date: 'short' }}</span>
-                    </p>
-                    }
+                @for (message of messages; track message.id) {
+                <p class="message-box messages"
+                    [class.my-message]="message.user_id === this.currentUserId"
+                    [class.other-messages]="message.user_id !== this.currentUserId">
+                    <span class="sender-email">{{ message.user_email }}</span>
+                    <span class="message-content">{{ message.content }}</span>
+                    <span class="date">{{ message.created_at | date: 'short' }}</span>
+                </p>
                 }
             </div>
         </div>

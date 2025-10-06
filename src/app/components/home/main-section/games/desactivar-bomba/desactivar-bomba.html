@@ -2,38 +2,86 @@
     <button class="btn btn-primary" (click)="this.backToHome()">
         Volver
     </button>
+
     <div class="container d-flex flex-column align-items-center justify-content-center h-100">
-        <div class="row">
-            <img class="img-desactivar-bomba" [src]="this.gameCover" alt="desactivar la bomba"/>
-        </div>
         @if (this.activeGame || this.gameOver) {
-            <div class="attempts-container">
-                <button class="btn-attempts" disabled>
-                    Intentos: {{ this.attempts }}
-                </button>
-            </div>
-            <p class="time-remaining" [class.text-danger]="this.timeRemaining <= 10 && this.activeGame">
-                TIEMPO RESTANTE: {{ this.timeRemaining }} / {{ this.totalTime }}
-            </p>
-        }
-        @if (!this.activeGame) {
-            <div class="start-game">
-                <h3 class="game-result">{{ this.gameResultMessage }}</h3>
-                <button class="btn-start" (click)="this.startGame()">
-                    {{ this.startButtonText }}
-                </button>
-            </div>
-        }
-        <div class="active-game">
-            @if (this.activeGame) {
-                <div class="code-entry-area">
-                    <div class="code-visual-display">
-                        {{ this.inputValue || this.hyphenatedWord.join(' ') }}
-                    </div>
-                    <input class="input-code-overlay" type="tel" placeholder="" [style.backgroundColor]="'transparent'" [(ngModel)]="this.inputValue" min="100" max="999" maxlength="3"/>
-                </div>
-                 <button class="btn-deactivate" (click)="this.deactivateBomb()" [disabled]="!this.inputValue"></button>
+        <p class="time-remaining" [class.text-danger]="this.timeRemaining <= 10 && this.activeGame">
+            TIEMPO RESTANTE: {{ this.digitalTime }}
+        </p>
+        <div class="game-info text-center mt-3">
+            <p class="h5" [style.color]="resultColor">{{ gameResultMessage }}</p>
+            <p class="h6 text-warning">{{ hintMessage }}</p>
+
+            @if (this.lastGuess !== null && this.lastGuess !== this.codeDeactivateBomb && this.activeGame) {
+            <p class="h6 text-info">ÚLTIMO INTENTO ({{ this.lastGuess }}): {{ this.gameResultMessage }}</p>
             }
+            @else if (this.lastGuess === this.codeDeactivateBomb && this.activeGame && !this.isCableCut) {
+            <p class="h6 text-success">¡CÓDIGO NUMÉRICO CORRECTO! Ahora, ¡corta el cable!</p>
+            }
+
+            @if (this.activeGame && !this.isCableCut) {
+            <p>Intentos Numéricos: {{ this.attempts }}</p>
+            }
+        </div>
+        }
+
+        <div class="row align-items-center justify-content-center mt-4 w-100">
+            <div class="col-md-6 text-center">
+                <img class="img-desactivar-bomba" [src]="this.gameCover" alt="desactivar la bomba" />
+                @if (this.activeGame) {
+
+                <div class="cables-container mt-3">
+                    @for (color of cableColors; track color) {
+
+                    <div class="cable-wrapper" (mouseenter)="this.hoverCable(color)" (mouseleave)="this.unhoverCable()"
+                        (click)="this.cutCableAttempt()" [class.cut-state]="this.isCableCut"
+                        [class.hover-state]="this.selectedCable === color && !this.isCableCut">
+                        <img [src]="'../../../assets/images/games/desactivar-bomba/cables/' + color + '_cable.png'"
+                            alt="Cable {{ color }}" class="cable-image" />
+                    </div>
+                    }
+                </div>
+
+                @if (this.isCableCut) {
+                <p class="mt-2 text-danger">Cable cortado: {{ this.cutCable | uppercase }}</p>
+                }
+                @else if (this.selectedCable) {
+                <p class="mt-2 text-warning">Cable Seleccionado: {{ this.selectedCable | uppercase }}</p>
+                }
+                }
+            </div>
+
+            <div class="col-md-6 d-flex flex-column align-items-center">
+                @if (!this.activeGame) {
+
+                <div class="start-game text-center">
+                    <h3 class="game-result mb-3">{{ this.gameResultMessage }}</h3>
+                    <button class="btn btn-lg btn-success" (click)="this.startGame()">
+                        {{ this.startButtonText }}
+                    </button>
+                </div>
+                }
+                @else if (this.activeGame) {
+
+                <div class="code-entry-area w-100 text-center">
+
+                    <div class="code-visual-display mb-2">
+                        {{ this.inputValue === null ? '---' : this.inputValue }}
+                    </div>
+                    <input class="input-code-overlay form-control form-control-lg text-center mb-3" type="tel"
+                        placeholder="Ingrese código (100-999)" [(ngModel)]="this.inputValue" min="100" max="999"
+                        maxlength="3" [disabled]="this.isCableCut || this.lastGuess === this.codeDeactivateBomb" />
+                    <button class="btn btn-warning mt-3 me-2" (click)="this.useHint()"
+                        [disabled]="this.hintUsed || this.isCableCut || this.lastGuess === this.codeDeactivateBomb">
+                        Usar Pista (1er Dígito)
+                    </button>
+                    <button class="btn btn-lg btn-primary mt-3" (click)="this.deactivateBomb()"
+                        [disabled]="!this.inputValue || this.isCableCut || this.inputValue < 100 || this.inputValue > 999 || this.lastGuess === this.codeDeactivateBomb">
+                        Ingresar Código
+                    </button>
+                </div>
+                }
+            </div>
         </div>
     </div>
 </section>

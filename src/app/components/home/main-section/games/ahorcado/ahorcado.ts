@@ -20,8 +20,8 @@ export class Ahorcado implements OnInit {
   public activeGame: boolean = true;
   public hyphenatedWord: string[] = [];
   private disabledLetters: string[] = [];
+  public letterStatus: { [key: string]: 'correct' | 'incorrect' | undefined } = {};
   public restartButtonText: string = 'REINICIAR JUEGO';
-  public gameCover: string = '../../../../../assets/images/game-cover/ahorcado.png';
   
   public buttonLetters: string[] = [
     'A',
@@ -75,6 +75,16 @@ export class Ahorcado implements OnInit {
     'CRIPTOMONEDA',
     'ELECTRONICA'
   ];
+
+  public hangmanImages: string[] = [
+    '../../../../../assets/images/games/ahorcado/ahorcado_0.jpg', // 0 errores (base)
+    '../../../../../assets/images/games/ahorcado/ahorcado_1.jpg', // 1 error (cabeza)
+    '../../../../../assets/images/games/ahorcado/ahorcado_2.jpg', // 2 errores (tronco)
+    '../../../../../assets/images/games/ahorcado/ahorcado_3.jpg', // 3 errores (brazo izquierdo)
+    '../../../../../assets/images/games/ahorcado/ahorcado_4.jpg', // 4 errores (brazo derecho)
+    '../../../../../assets/images/games/ahorcado/ahorcado_5.jpg', // 5 errores (pierna izquierda)
+    '../../../../../assets/images/games/ahorcado/ahorcado_6.jpg'  // 6 errores (pierna derecha - DERROTA!)
+  ] 
   
   constructor(private cdr: ChangeDetectorRef, private dialogs: Dialogs, private router: Router, private scores: Scores) {}
   
@@ -88,6 +98,7 @@ export class Ahorcado implements OnInit {
     this.failedAttemps = 0;
     this.victory = false;
     this.activeGame = true;
+    this.letterStatus = {};
     this.disabledLetters = [];
     this.word = this.wordList[Math.round(Math.random() * (this.wordList.length - 1))];
     this.hyphenatedWord = Array(this.word.length).fill('_');
@@ -111,6 +122,8 @@ export class Ahorcado implements OnInit {
     if (this.activeGame) {
       const alreadyGuessedLetterFlag: boolean = this.hyphenatedWord.some((c) => c === letter);
       
+      let foundLetterInWord = false;
+
       for (let i = 0; i < this.word.length; i++) {
         const wordLetter = this.word[i];
         
@@ -118,6 +131,7 @@ export class Ahorcado implements OnInit {
         if (wordLetter === letter && !alreadyGuessedLetterFlag) {
           this.hyphenatedWord[i] = letter;
           letterFlag = true;
+          foundLetterInWord = true;
           winGame = this.hyphenatedWord.some((hyphen) => hyphen == '_');
 
           // adivina la palabra y se termina la partida
@@ -136,6 +150,14 @@ export class Ahorcado implements OnInit {
         }
       }
 
+      // asigno estado del color despues de comprobar
+      if (letterFlag) {
+        this.letterStatus[letter] = 'correct';
+      }
+      else if (!letterFlag && !alreadyGuessedLetterFlag) {
+        this.letterStatus[letter] = 'incorrect';
+      }
+
       // se resta uno de los 6 intentos si no adivina la letra
       if (!letterFlag && !alreadyGuessedLetterFlag) {
         if (this.attempts > 0) {
@@ -148,7 +170,7 @@ export class Ahorcado implements OnInit {
 
             this.dialogs.showDialogMessage({
               title: 'Games Room',
-              content: '¡PERDISTE!'
+              content: '¡PERDISTE! la palabra oculta era ' + this.word
             });
 
             this.failedAttemps = this.maxAttempts - this.attempts;

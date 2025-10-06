@@ -1,3 +1,12 @@
+// Variables de Color
+$primary-color: #6842ff;
+$success-color: #58e95e;
+$danger-color: #9f6aa8;
+$text-color: #414581;
+$win-message: $success-color;
+$tie-message: #ffd644;
+$lost-message: $danger-color;
+
 .mayor-menor-container {
     font-family: "Poppins", sans-serif;
     background-repeat: no-repeat;
@@ -5,170 +14,168 @@
     background-position: center;
     background-size: cover;
     min-height: 100vh;
-}
-  
-.score {
-    text-align: center;
-    color: #414581e6;
-    font-size: 1.5rem;
-    font-weight: bold;
+    padding-bottom: 50px;
 }
 
-.game-result {
-    text-align: center;
-    color: #414581e6;
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-.attempts {
-    text-align: center;
-    color: #414581e6;
-    font-weight: bold;
-    font-size: x-large;
-}
-  
-.rowCards {
-    display: flex;
-    justify-content: center;
-}
-  
-.left-card {
-    width: 10rem;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 10px;
-}
-  
-.right-card {
-    width: 10rem;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 10px;
-}
-  
-.btn-mayor-menor {
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-
-.btn-menor {
-    padding: 1.3em 3em;
-    font-size: 12px;
+// Boton Volver y Reiniciar (General)
+.btn-primary {
+    margin-top: 25px;
+    margin-left: 25px;
+    padding: 10px 20px;
+    font-weight: 200;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    letter-spacing: 2.5px;
-    font-weight: 500;
-    color: rgb(255, 255, 255);
-    background-color: #58e95e;
+    color: #f9faff;
+    background: $primary-color;
     border: none;
     border-radius: 30px;
-    transition: all 0.3s ease 0s;
-    cursor: pointer;
-    outline: none;
+    transition: background 0.3s ease;
 }
 
-.btn-menor:hover {
-    background-color: #6efd73;
-    color: #fff;
-    transform: translateY(-7px);
-}
-  
-.btn-menor:active {
-    transform: translateY(-2px);
+.btn-primary:hover {
+    color: #f9faff;
+    background: lighten($primary-color, 10%);
 }
 
-.btn-mayor {
-    padding: 1.3em 3em;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 2.5px;
-    font-weight: 500;
-    color: white;
-    background-color: #9f6aa8;
-    border: none;
-    border-radius: 30px;
-    transition: all 0.3s ease 0s;
-    cursor: pointer;
-    outline: none;
-    margin-left: 1.5rem;
-}
-  
-.btn-mayor:hover {
-    background-color: #ca88d6;
-    color: #fff;
-    transform: translateY(-7px);
-}
-
-.btn-mayor:active {
-    transform: translateY(-2px);
-}
-  
 .btn-restart {
     padding: 1.3em 3em;
-    padding-bottom: 20px;
     font-size: 15px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    text-align: center;
     color: #f9faff;
-    background: #6842ff;
+    background: $primary-color;
     border: none;
     border-radius: 30px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease 0s;
     cursor: pointer;
-    outline: none;
     display: block;
-    margin-top: 30px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: auto;
+    margin: 30px auto;
 }
 
 .btn-restart:hover {
-    color: #f9faff;
-    background: #7c5cfc;
+    background: lighten($primary-color, 10%);
 }
 
 .btn-restart:active {
     transform: translateY(-1px);
 }
 
-.btn-primary {
-    margin-top: 25px;
-    margin-left: 25px;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 10px;
-    font-weight: 200;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #f9faff;
-    background: #6842ff;
-    border: none;
-    border-radius: 30px;
-}
-  
-.btn-primary:hover {
-    color: #f9faff;
-    background: #7c5cfc;
+// Puntajes y Mensajes de Estado
+.score, .attempts {
+    text-align: center;
+    color: $text-color;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
 }
 
+.game-result {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 900;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    transition: color 0.5s ease;
+}
+
+// Color para mostrar segun el resultado de la partida
+.game-result.result-win {
+    color: $win-message;
+}
+
+.game-result.result-tie {
+    color: $tie-message;
+}
+
+.game-result.result-lost {
+    color: $lost-message;
+}
+
+// Contenedor de Cartas y Cartas
+.rowCards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.left-card, .right-card {
+    width: 10rem;
+    height: 14rem;
+    object-fit: cover;
+    margin: 0;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    transition: transform 0.5s ease-in-out;
+}
+
+// Botones de Accion (Mayor y Menor)
+.btn-mayor-menor {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.btn-menor, .btn-mayor {
+    padding: 1.5em 3.5em;
+    font-size: 14px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    color: white;
+    border: none;
+    border-radius: 40px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+}
+
+.btn-menor {
+    background-color: $success-color;
+    margin-right: 1.5rem;
+}
+
+.btn-mayor {
+    background-color: $danger-color;
+}
+
+.btn-menor:hover, .btn-mayor:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-menor:active, .btn-mayor:active {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+// Imagen de Portada del Juego
 .img-mayor-menor {
     width: 10rem;
     display: block;
-    margin-right: auto;
-    margin-left: auto;
-    margin-bottom: 30px;
+    margin: 0 auto 30px auto;
 }
 
+// Responsive design
 @media screen and (max-width: 480px) {
-    .left-card {
-      width: 9rem;
+    .left-card, .right-card {
+        width: 7rem;
+        height: 10rem;
     }
-    .right-card {
-      width: 9rem;
+
+    .btn-menor, .btn-mayor {
+        padding: 1em 2em;
+        font-size: 12px;
+    }
+
+    .btn-menor {
+        margin-right: 1rem;
+    }
+
+    .game-result {
+        font-size: 1.5rem;
     }
 }

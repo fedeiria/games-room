@@ -33,6 +33,22 @@ export class Users {
       return null;
     }
 
-    return data;
+    if (!data || data.length === 0) {
+      return null;
+    }
+
+    return data.map((dbUser: any) => {
+      const roleAsNumber = Number(dbUser.role_id);
+
+      const finalRoleId = (isNaN(roleAsNumber)) ? 1 : roleAsNumber;
+
+      return {
+        id: dbUser.id,
+        name: dbUser.name,
+        surname: dbUser.surname,
+        email: dbUser.email,
+        roleId: finalRoleId
+      } as IUser;
+    });
   }
 }

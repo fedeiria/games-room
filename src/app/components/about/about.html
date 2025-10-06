@@ -18,7 +18,7 @@
                     <div>
                         <h4 class="fw-semibold">Desactivar la bomba</h4>
                         <p class="text-muted">
-                            El sistema asignará una contraseña aleatoria entre 1 y 1000. La única pista que se le
+                            El sistema asignará una contraseña aleatoria entre 1 y 999. La única pista que se le
                             brindará al usuario consiste en avisarle si el número ingresado es mayor o menor a la
                             contraseña. El usuario tendrá 60 segundos para adivinarla.
                         </p>
@@ -28,8 +28,8 @@
 
             <!-- Botón de navegación -->
             <div class="text-center mt-4">
-                <button (click)="backToHome()" class="btn btn-dark px-4">
-                    Página principal
+                <button (click)="this.backToHome()" class="btn btn-dark px-4">
+                    Volver
                 </button>
             </div>
         </div>

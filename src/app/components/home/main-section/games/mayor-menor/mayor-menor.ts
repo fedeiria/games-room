@@ -28,10 +28,7 @@ export class MayorMenor {
   public gameOver: boolean = false;
   public activeGame: boolean = false;
   
-  public resultColor: string = '';
-  private resultColorWin: string = '';
-  private resultColorTie: string = '';
-  private resultColorLost: string = '';
+  public resultState: 'win' | 'tie' | 'lost' | null = null;
   public gameResultMessage: string = '';
   private resultMessageWin: string = '¡ADIVINASTE!';
   private resultMessageTie: string = '¡EMPATE!';
@@ -99,14 +96,12 @@ export class MayorMenor {
 
   constructor(private dialogs: Dialogs, private router: Router, private scores: Scores) { }
 
+  // inicializa el juego
   public startGame(): void {
     this.score = 0;
     this.attempts = this.maxAttempts;
     this.activeGame = true;
     this.gameOver = false;
-    this.resultColorWin = 'green';
-    this.resultColorTie = 'violet';
-    this.resultColorLost = 'red';
     this.startButtonText = 'Reiniciar Juego';
     this.cardList.sort(() => Math.random() - 0.5);
     this.cardsToGuess = [...this.cardList];
@@ -114,8 +109,10 @@ export class MayorMenor {
     this.currentCard = this.cardsToGuess[this.currentIndex];
     this.currentNumber = this.currentCard.number;
     this.cardImage = `../../../../../assets/images/games/mayor-menor/${this.currentCard.type}-${this.currentCard.number}.png`;
+    this.rightCardImage = '../../../../../assets/images/games/mayor-menor/back-side-poker-card.png';
   }
 
+  // corroboro la opcion seleccionada por el jugador 
   public playMayorMenor(mayorMenor: string): void {
     const cardPlayed: number = this.currentNumber;
 
@@ -142,18 +139,18 @@ export class MayorMenor {
         if (cardPlayed > this.currentNumber) {
           this.score++;
           this.gameResultMessage = this.resultMessageWin;
-          this.resultColor = this.resultColorWin;
+          this.resultState = 'win';
           this.resetMessagesValues();
         }
         else if (cardPlayed === this.currentNumber) {
           this.gameResultMessage = this.resultMessageTie;
-          this.resultColor = this.resultColorTie;
+          this.resultState = 'tie';
           this.resetMessagesValues();
         }
         else {
           this.attempts--;
           this.gameResultMessage = this.resultMessageLost;
-          this.resultColor = this.resultColorLost;
+          this.resultState = 'lost';
           this.resetMessagesValues();
         }
         break;
@@ -161,18 +158,18 @@ export class MayorMenor {
         if (cardPlayed < this.currentNumber) {
           this.score++;
           this.gameResultMessage = this.resultMessageWin;
-          this.resultColor = this.resultColorWin;
+          this.resultState = 'win';
           this.resetMessagesValues();
         }
         else if (cardPlayed === this.currentNumber) {
           this.gameResultMessage = this.resultMessageTie;
-          this.resultColor = this.resultColorTie;
+          this.resultState = 'tie';
           this.resetMessagesValues();
         }
         else {
           this.attempts--;
           this.gameResultMessage = this.resultMessageLost;
-          this.resultColor = this.resultColorLost;
+          this.resultState = 'lost';
           this.resetMessagesValues();
         }
         break;
@@ -181,6 +178,7 @@ export class MayorMenor {
     this.chechEndGame();
   }
 
+  // corroboro si el juego ha finalizado por intentos agotados o total de cartas jugadas 
   private chechEndGame(): void {
     if (this.attempts == 0 || this.currentIndex >= this.cardsToGuess.length - 1) {
       setTimeout(() => {
@@ -192,6 +190,15 @@ export class MayorMenor {
       }, 2000);
     }
   }
+
+  // reinicio mensajes
+  private resetMessagesValues(): void {
+    setTimeout(() => {
+      this.gameResultMessage = '';
+      this.resultState = null;
+    }, 2000);
+  }
+
   private async saveResultData(): Promise<void> {
     try {
       await this.scores.setScore({
@@ -207,13 +214,6 @@ export class MayorMenor {
 
       console.error('[mayor-menor.ts] saveResultData error:', error);
     }
-  }
-
-  private resetMessagesValues(): void {
-    setTimeout(() => {
-      this.gameResultMessage = '';
-      this.resultColor = '';
-    }, 2000);
   }
 
   public backToHome(): void {

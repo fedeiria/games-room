@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Auth } from '../../services/supabase/auth/auth';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-about',
@@ -9,9 +11,17 @@ import { Router } from '@angular/router';
 })
 export class About {
 
-  constructor(private router: Router) { }
+  constructor(private auth: Auth, private router: Router) { }
 
   backToHome() {
-    this.router.navigate(['/']);
+    this.auth.observableUserDetails$.pipe(
+      take(1)
+    ).subscribe(user => {
+      const isLoggued = !!user;
+
+      const targetRoute = isLoggued ? '/home' : '/welcome';
+
+      this.router.navigate([targetRoute]);
+    });
   }
 }

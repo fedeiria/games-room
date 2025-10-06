@@ -1,132 +1,105 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/supabase-js';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 import { Auth } from '../../auth/auth';
 import { IChatMessage } from '../../../../interfaces/chat-room/ichat-message';
 import { createSupabaseClientConnection } from '../../../../core/supabase/client-connection';
-
-// Fila tal como está en la DB
-type ChatRoomRow = {
-  id: string;
-  user_id: string;
-  user_email: string;
-  content: string;
-  created_at: Date;
-};
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatRoom implements OnDestroy {
 
-  private limitRows: number = 100;
-  private supabaseClient = createSupabaseClientConnection();
-  private chatChannel: RealtimeChannel | null = null;
+  private limitRows: number = 50;
 
+  private readonly supabaseClient: SupabaseClient = createSupabaseClientConnection();
+
+  // lista de mensajes para el componente
   private readonly messagesSubject = new BehaviorSubject<IChatMessage[]>([]);
   public readonly observableMessages$: Observable<IChatMessage[]> = this.messagesSubject.asObservable();
+
+  private authSubscription: Subscription | undefined;
+
+  // canal realtime de supabase
+  private chatChannel = this.supabaseClient.channel('chat_room_channel');
   
-  constructor(private auth: Auth, private zone: NgZone) {
-    this.auth.observableUserDetails$.subscribe(async userDetails => {
-      if (userDetails?.data?.user) {
-        await this.supabaseClient.auth.getSession();
-        
-        if (!this.chatChannel) {
-          this.chatChannel = this.supabaseClient.channel('public:chat_room');
-          this.fetchInitialMessages(this.limitRows);
-        }
-      }
-      else {
-        if (this.chatChannel) {
-          this.supabaseClient.removeChannel(this.chatChannel);
-          this.chatChannel = null;
-        }
-      }
-    });
+  constructor(private auth: Auth, private ngZone: NgZone) {
+    this.loadInitialMessages();
+    this.startRealtimeListener();
   }
 
-  // obtengo una carga inicial de los mensajes
-  private async fetchInitialMessages(limitRows: number) {
+  // carga inicial de mensajes
+  private async loadInitialMessages(): Promise<void> {
     const { data, error } = await this.supabaseClient
       .from('chat_room')
       .select('*')
       .order('created_at', { ascending: true })
-      .limit(limitRows);
+      .limit(this.limitRows);
 
-    if (error) {
-      console.log('[ChatRoom] error al obtener los mensajes: ', error.message);
-      return;
-    }
-    
-    const messages = (data || []).map(row => ({
-      id: row.id,
-      userId: row.user_id,
-      userEmail: row.user_email,
-      content: row.content,
-      createdAt: row.created_at,
-    }));
+      if (error) {
+        console.error('[chat-room service] - error al cargar los mensajes del chat: ', error);
+        return;
+      }
 
-    this.messagesSubject.next(messages);
-    this.subscribeToRealtimeUpdates();
+      if (data) {
+        this.messagesSubject.next(data as IChatMessage[]);
+      }
   }
 
-  // suscripcion realtime al canal 'chat_room' 
-  private subscribeToRealtimeUpdates(): void {
-    if (!this.chatChannel) return;
-
+  // inicia la subscripcion al canal
+  private startRealtimeListener(): void {
     this.chatChannel
       .on('postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'chat_room' },
-        (payload: RealtimePostgresChangesPayload<ChatRoomRow>) =>  {
-          this.zone.run(() => {
-            
-            if (!payload.new) return;
+        (payload) => {
+          this.ngZone.run(() => {
+            const currentMessages = this.messagesSubject.value;
+            const newMessage = payload.new as IChatMessage;
 
-            const newRow = payload.new as ChatRoomRow;
-
-            const newMessage: IChatMessage = {
-              id: newRow.id,
-              userId: newRow.user_id,
-              userEmail: newRow.user_email,
-              content: newRow.content,
-              createdAt: new Date(newRow.created_at),
-            };
-
-            const currentMessages = this.messagesSubject.getValue();
             this.messagesSubject.next([...currentMessages, newMessage]);
           });
         }
       )
-      .subscribe((status) => {
-        console.log('[Realtime channel] status: ', status);
+      .subscribe();
+
+      this.chatChannel.subscribe((status) =>{
+        if (status === 'SUBSCRIBED') {
+          console.log('canal activo y escuchando');
+        }
+        else {
+          console.warn('estado del canal: ', status);
+        }
       });
   }
 
-  // inserto el mensaje en la tabla 'chat_room'
-  async sendMessage(content: string, userId: string, userEmail: string) {
-    const trimmedContent = content?.trim();
-    if (!trimmedContent || !userId) return;
+  // guardo el mensaje en la tabla chat_room
+  public async sendMessage(content: string) {
+    const currentUser = await this.auth.currentUserDetails;
 
-    const user_id = userId
-    const user_email = userEmail;
+    if (!currentUser.data.user) {
+      console.warn('[chat-room service]: usuario no logueado');
+      return;
+    }
+
+    const user = currentUser.data.user;
 
     const { error } = await this.supabaseClient
       .from('chat_room')
       .insert({
-        user_id,
-        user_email,
-        content: trimmedContent
+        user_id: user.id,
+        user_email: user.email,
+        content: content
       });
 
     if (error) {
-      console.error('[ChatRoom] error al enviar el mensaje: ', error);
+      console.error('[chat-room service] - Error al enviar el mensaje: ', error);
     }
   }
 
+  // seek & destroy!
   ngOnDestroy(): void {
-    if (this.chatChannel) {
-      this.supabaseClient.removeChannel(this.chatChannel);
-    }
+    this.supabaseClient.removeChannel(this.chatChannel);
+    this.authSubscription?.unsubscribe();
   }
 }

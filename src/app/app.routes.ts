@@ -1,11 +1,13 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
     // public routes
     {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'welcome'
+        loadComponent: () => import('./components/welcome/welcome').then(c => c.Welcome)
+        //redirectTo: 'welcome'
     },
     {
         path: 'welcome',
@@ -32,13 +34,15 @@ export const routes: Routes = [
     {
         path: 'home',
         title: 'Inicio',
-        loadComponent: () => import('./components/home/home').then(c => c.Home)
+        loadComponent: () => import('./components/home/home').then(c => c.Home),
+        canActivate:[authGuard]
     },
     // load module: gamesModule
     {
         path: 'games',
         title: 'Juegos',
-        loadChildren: () => import('./modules/games/games-module').then(m => m.GamesModule)
+        loadChildren: () => import('./modules/games/games-module').then(m => m.GamesModule),
+        canActivate:[authGuard]
     },
 
     // page not found (404)

@@ -1,85 +1,64 @@
-.active-game {
-    text-align: center;
+/* ========================= ESTRUCTURA GENERAL Y FONDO ========================== */
+
+.desactivar-bomba-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    font-family: "Poppins", sans-serif;
+    background-color: #222; /* Fondo oscuro para el tema de bomba */
+    color: #eee;
 }
 
-.attempts {
+.img-desactivar-bomba {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.game-info {
+    font-size: 1.1em;
     text-align: center;
-    color: #414581e6;
+    margin-bottom: 20px;
+
+    p {
+        margin-bottom: 5px;
+    }
+}
+
+.game-result {
+    color: #fff;
+    font-size: 2em;
+    text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
+}
+
+/* ======================= TEMPORIZADOR Y CONTADORES =========================== */
+
+.time-remaining {
+    font-family: 'Digital-Display-Font', monospace; /* Usa una fuente de display digital si tienes una */
+    font-size: 3.5em; /* Tamaño más grande para impacto */
     font-weight: bold;
-    font-size: x-large;
-}
-
-.btn-deactivate {
-    border: none;
-    cursor: pointer;
-    background: url('../../../../../../assets/images/games/desactivar-bomba/deactivate-bomb-button.jpg');
-    background-size: contain;
-    background-position: center;
-    display: inline-block;
-    width: 100px;
-    height: 100px;
-    transition: transform 0.2s ease;
-}
-
-.btn-deactivate:hover {
-    // Muevo hacia arriba
-    transform: translateY(-3px);
-}
-
-.btn-deactivate:active {
-    // Muevo hacia abajo
-    transform: translateY(0px);
-}
-
-.btn-primary {
-    margin-top: 25px;
-    margin-left: 25px;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 10px;
-    font-weight: 200;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #f9faff;
-    background: #6842ff;
-    border: none;
-    border-radius: 30px;
-}
-
-.btn-primary:hover {
-    color: #f9faff;
-    background: #7c5cfc;
-}
-
-.btn-start {
-    padding: 1.3em 3em;
-    padding-bottom: 20px;
-    font-size: 15px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    color: #0f0; /* Color LED verde */
+    text-shadow: 0 0 7px #0f0, 0 0 10px #0f0; /* Efecto de brillo */
+    background-color: #111; /* Fondo oscuro detrás del número */
+    padding: 5px 15px;
+    border-radius: 5px;
+    margin-top: 0;
+    margin-bottom: 15px;
     text-align: center;
-    color: #f9faff;
-    background: #6842ff;
-    border: none;
-    border-radius: 30px;
-    transition: all 0.3s ease 0s;
-    cursor: pointer;
-    outline: none;
-    display: block;
-    margin-top: 30px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: auto;
 }
 
-.btn-start:hover {
-    color: #f9faff;
-    background: #7c5cfc;
+.time-remaining.text-danger {
+    color: #ff0000; /* Rojo si quedan pocos segundos */
+    text-shadow: 0 0 7px #ff0000, 0 0 10px #ff0000;
 }
 
-.btn-start:active {
-    transform: translateY(-1px);
+.attempts-container {
+    text-align: center;
 }
 
 .btn-attempts {
@@ -96,53 +75,36 @@
     letter-spacing: 1px;
 }
 
+/* ======================== CONTROLES NUMÉRICOS Y PISTA =========================== */
+
 .code-entry-area {
     position: relative;
-    width: 250px;
-    margin: 1rem auto;
+    width: 100%;
+    max-width: 300px;
+}
+
+.code-entry-area button {
+    position: relative;
+    z-index: 2;
 }
 
 .code-visual-display {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 2.5rem;
-    font-family: monospace;
-    letter-spacing: 0.5em;
-    color: dark;
-    padding: 1.3em 3em;
-    border: 2px solid transparent;
-    border-radius: 15px;
-    height: 100%;
-    box-sizing: border-box;
-}
-
-.desactivar-bomba-container {
-    font-family: "Poppins", sans-serif;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
-    background-size: cover;
-    min-height: 100vh;
-}
-
-.game-result {
-    text-align: center;
-    color: #414581e6;
-    font-size: 1.5rem;
+    font-size: 2.5em;
     font-weight: bold;
-}
-
-.img-desactivar-bomba {
-    width: 10rem;
-    display: block;
-    margin-right: auto;
-    margin-left: auto;
-    margin-bottom: 30px;
+    letter-spacing: 5px;
+    background-color: #333;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #0f0; /* Color de pantalla digital */
+    margin-bottom: 15px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .input-code-overlay {
+    // Propiedades de superposición
     position: absolute;
     opacity: 0;
     cursor: text;
@@ -150,11 +112,13 @@
     left: 0;
     width: 100%;
     height: 100%;
+    z-index: 1;
+    
+    // Propiedades de estilo para cuando está activo (aunque invisible)
     color: #414581e6;
     caret-color: black;
     background-color: transparent !important;
     border: 2px solid transparent !important;
-    z-index: 10;
     text-align: center;
     font-size: 2.5rem;
     font-weight: bolder;
@@ -166,24 +130,105 @@
     margin: 0;
 }
 
-.attempts-container {
-    text-align: center;
+/* ======================= INTERACTIVIDAD DE CABLES ============================ */
+
+.cables-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 15px; /* Espacio entre cables */
+    border-radius: 10px;
 }
 
-.time-remaining {
-    margin-top: 0;
-    font-family: Roboto;
-    font-size: x-large;
-    text-align: center;
+.cable-wrapper {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+    opacity: 0.8;
 }
+
+.cable-image {
+    width: 100px; /* Tamaño del cable */
+    height: auto;
+}
+
+/* Estado de HOVER: resalta el cable al pasar el mouse */
+.cable-wrapper.hover-state {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px 5px rgba(255, 255, 0, 0.7); /* Efecto de brillo amarillo */
+    opacity: 1;
+}
+
+.cable-wrapper.cut-state {
+    pointer-events: none; /* Deshabilita clics */
+    opacity: 0.5;
+}
+
+/* ========================= BOTONES ========================== */
+.btn-primary {
+    margin-bottom: 25px;
+    padding: 10px 20px;
+    font-weight: 200;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #f9faff;
+    background: #6842ff;
+    border: none;
+    border-radius: 30px;
+}
+
+.btn-primary:hover {
+    color: #f9faff;
+    background: #7c5cfc;
+}
+
+.btn-primary.back-button {
+    position: relative;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.btn-start {
+    padding: 1.3em 3em;
+    font-size: 15px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #f9faff;
+    background: #6842ff;
+    border: none;
+    border-radius: 30px;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    display: block;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-start:hover {
+    color: #f9faff;
+    background: #7c5cfc;
+}
+
+.btn-start:active {
+    transform: translateY(-1px);
+}
+
+/* ======================== MEDIA QUERIES =========================== */
 
 @media screen and (max-width: 480px) {
     .img-desactivar-bomba {
         margin-top: 20px;
     }
 
-    .btn-deactivate {
-        margin-top: 20px;
-        margin-left: 0;
+    .cables-container {
+        flex-direction: column;
+        gap: 5px;
+        align-items: center;
+    }
+    
+    .cable-image {
+        width: 80px;
     }
 }

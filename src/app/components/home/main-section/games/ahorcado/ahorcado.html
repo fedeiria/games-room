@@ -2,7 +2,10 @@
     <button class="btn btn-primary" (click)="backToHome()">Volver</button>
     <div class="container game-container">
         <div class="col">
-            <img class="img-ahorcado" src="{{this.gameCover}}" alt="ahorcado">
+            <img
+                class="img-ahorcado"
+                [src]="this.hangmanImages[this.failedAttemps]"
+                alt="ahorcado - {{this.failedAttemps}}">
         </div>
         <p class="attempts">Intentos: {{this.attempts}}/{{this.maxAttempts}}</p>
         <div class="container-general row">
@@ -18,7 +21,18 @@
                 </div>
                 <div class="keypad">
                     @for (letter of this.buttonLetters; track $index) {
-                        <button class="word-btn" (click)="this.sendLetter(letter)" [disabled]="this.isDisabledLetter(letter)" [ngClass]="{ 'disabled-button': this.isDisabledLetter(letter) }">{{letter}}</button>
+                        <button
+                            class="word-btn"
+                            (click)="this.sendLetter(letter)"
+                            [disabled]="this.isDisabledLetter(letter) || !this.activeGame"
+                            [ngClass]="{
+                                'disabled-button': this.isDisabledLetter(letter),
+                                'correct-letter': this.letterStatus[letter] === 'correct',
+                                'incorrect-letter': this.letterStatus[letter] === 'incorrect'
+                            }"
+                            >
+                            {{letter}}
+                        </button>
                     }
                 </div>
             </div>

@@ -8,6 +8,8 @@ import { Auth } from '../../../services/supabase/auth/auth';
 import { Dialogs } from '../../../services/messages/dialogs';
 import { Validations } from '../../../services/validations/validations';
 import { Logins } from '../../../services/supabase/database/logins/logins';
+import { Users } from '../../../services/users/users';
+import { filter, firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +26,7 @@ export class Login implements OnInit {
     password: FormControl<string>;
   }>;
 
-  constructor(private auth: Auth, private dialog: Dialogs, private formBuilder: NonNullableFormBuilder, private logins: Logins, private router: Router, private validations: Validations) { }
+  constructor(private auth: Auth, private dialog: Dialogs, private formBuilder: NonNullableFormBuilder, private logins: Logins, private router: Router, private users: Users, private validations: Validations) { }
   
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group(
@@ -60,12 +62,20 @@ export class Login implements OnInit {
       
       // si el usuario esta registrado guardo el timestamp del login en supabase y redirijo al home
       if (data.user) {
+
+        // convierto un observable en una promesa
+        await firstValueFrom(
+          this.users.currentUser$.pipe(
+            filter(user => user !== null)
+          )
+        );
+
         this.logins.saveLoginTimestamp(data.user.id);
         this.router.navigate(['/home']);
       }
+      // si el usuario no esta registrado...
       else {
-        //muestro error para debug
-        console.error('error:', error);
+        console.error('[login service] error:', error);
         
         // muestro mensaje de error al usuario
         this.dialog.showDialogMessage({
@@ -76,7 +86,7 @@ export class Login implements OnInit {
     }
     catch (error: unknown) {
       // error para debug
-      console.error('Error durante el login: ', error);
+      console.error('[service login] Error: ', error);
 
       // mensaje por defecto
       let message = 'Ocurrio un error inesperado.';

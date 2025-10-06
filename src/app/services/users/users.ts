@@ -37,28 +37,16 @@ export class Users {
     });
   }
 
+  // obtengo los datos del usuario logueado incluido el role y los emito  
   private async loadAndSetUser(userId: string): Promise<void> {
     try {
       // obtengo el rol del usuario
       const userData: IUser[] | null = await this.supabaseUsers.getUserData(userId);
-
+      
       if (userData && userData.length > 0) {
         const user: IUser = userData[0];
-        const roleAsNumber = Number(user.roleId);
-
-        //const rawRoleId = user.roleId !== undefined ? user.roleId : (user as any).role_id;
-
-        //let finalRole: UserRole;
-
-        //const roleAsNumber = rawRoleId !== undefined && rawRoleId !== null ? Number(rawRoleId) : NaN;
-
-        //finalRole = roleAsNumber as UserRole;
-
-        const finalRole = (isNaN(roleAsNumber) || !Object.values(UserRole).includes(roleAsNumber)) 
-            ? UserRole.User 
-            : roleAsNumber as UserRole;
-
-        this.userRoleSubject.next(finalRole);
+        
+        this.userRoleSubject.next(user.roleId);
         this.currentUserSubject.next(user);
         return;
       }

@@ -1,7 +1,7 @@
 export interface IChatMessage {
     id: string;
-    userId: string;
-    userEmail: string;
+    user_id: string;
+    user_email: string;
     content: string;
-    createdAt: Date;
+    created_at: string;
 }

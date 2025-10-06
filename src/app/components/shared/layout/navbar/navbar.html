@@ -9,14 +9,15 @@
                 @case (this.UserRole.Admin) {
                     <ul class="nav justify-content-center">
                         <li><a routerLink="/dashboard" class="nav-link px-2 text-white me-4">Dashboard Admin</a></li>
-                        <li><a routerLink="/dashboard" class="nav-link px-2 text-white me-4">Gestion Usuarios</a></li>
+                        <li><a routerLink="/games" class="nav-link px-2 text-white me-4">Juegos</a></li>
+                        <li><a routerLink="/about" class="nav-link px-2 text-white me-2">Quien soy</a></li>
                     </ul>
                 }
                 @case (this.UserRole.User) {
                     <ul class="nav justify-content-center">
-                        <li><a routerLink="/" class="nav-link px-2 text-white me-4">Inicio</a></li>
-                        <li><a routerLink="/" class="nav-link px-2 text-white me-4">Juegos</a></li>
-                        <li><a routerLink="/" class="nav-link px-2 text-white me-4">Destacados</a></li>
+                        <li><a routerLink="/home" class="nav-link px-2 text-white me-4">Inicio</a></li>
+                        <li><a routerLink="/games" class="nav-link px-2 text-white me-4">Juegos</a></li>
+                        <li><a routerLink="/about" class="nav-link px-2 text-white me-2">Quien soy</a></li>
                     </ul>
                 }
                 @default {
