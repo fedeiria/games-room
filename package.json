@@ -37,6 +37,7 @@
     "@supabase/supabase-js": "^2.57.4",
     "bootstrap": "^5.3.8",
     "firebase": "^12.2.0",
+    "ngx-pagination": "^6.0.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

@@ -5,7 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 
 import { Spinner } from "../../shared/spinner/spinner";
 import { IUser } from '../../../interfaces/user/iuser';
-import { UserRole } from '../../../enums/user-role.enum';
+import { UserRole } from '../../../enums/user-role';
 import { Dialogs } from '../../../services/messages/dialogs';
 import { Auth } from '../../../services/supabase/auth/auth';
 import { Validations } from '../../../services/validations/validations';
@@ -94,8 +94,6 @@ export class Register implements OnInit {
 
       // si el usuario no existe...
       if (data.user) {
-        console.log('datos de usuario: ', data);
-
         // guardo los datos del formulario en el objeto
         this.newUser = {
           id: data.user.id,
@@ -106,27 +104,29 @@ export class Register implements OnInit {
         }
 
         // guardo los datos del usuario
-        this.users.saveNewUser(this.newUser);
+        await this.users.saveNewUser(this.newUser);
 
         // guardo la fecha de login del usuario
-        this.logins.saveLoginTimestamp(this.newUser.id);
-
-        // ejecuto un delay y redirijo al home
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        this.router.navigate(['/home']);
+        await this.logins.saveLoginTimestamp(this.newUser.id);
+        
+        this.loading = false;
 
         // muestro mensaje exitoso
-        this.dialog.showDialogMessage({
+        await this.dialog.showDialogMessage({
           title: 'Games Room',
           content: 'Usuario registrado con exito.'
         });
+
+        this.router.navigate(['/home']);
       }
       else {
         //muestro error para debug
         console.error('error supabase:', error);
         
+        this.loading = false;
+
         // muestro mensaje de error al usuario
-        this.dialog.showDialogMessage({
+        await this.dialog.showDialogMessage({
           title: 'Games Room',
           content: 'Ya existe un usuario registrado con el correo: ' + this.email.value
         });
@@ -139,13 +139,10 @@ export class Register implements OnInit {
       // mensaje por defecto
       let message = 'Error inesperado durante el registro.';
 
-      this.dialog.showDialogMessage({
+      await this.dialog.showDialogMessage({
         title: 'Games Room',
         content: `Ocurrio un error al registrar el usuario: ${message}`
       });
-    }
-    finally {
-      this.loading = false;
     }
   }
 }

@@ -1,0 +1,45 @@
+.container {
+    width: auto;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.form-control {
+    margin-top: 1.5rem;
+    margin-left: 1.3rem;
+    width: 15rem;
+    float: right;
+}
+
+.justify-content-end {
+    margin-right: 20px;
+}
+
+.pagination-styles::ng-deep a {
+    border-radius: 8px;
+}
+
+.pagination-styles::ng-deep .current {
+    border-radius: 8px;
+    background-color: #cc0000;
+}
+
+.table {
+    border: 1px;
+    width: 97%;
+    margin: 25px auto;
+    text-align: center;
+}
+
+table th {
+    font-weight: 700;
+    font-size: medium;
+}
+
+table td {
+    font-size: medium;
+}
+
+tr {
+    cursor: default;
+}

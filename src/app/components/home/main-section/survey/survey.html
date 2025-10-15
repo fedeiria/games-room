@@ -1,0 +1,189 @@
+@if (this.showModal) {
+    <div class="modal-backdrop"></div>
+    <div class="custom-modal" role="dialog" aria-modal="true" aria-labelledby="surveyModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="surveyModalLabel">Tu opinión es importante</h5>
+                    <button type="button" class="btn-close" (click)="this.onClose()" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="text-muted">¡Gracias por jugar! Ayúdanos a mejorar el juego respondiendo esta breve encuesta.</p>
+                    <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()">
+
+                        <!-- name -->
+                        <div class="mb-3">
+                            <label for="form-name" class="form-label">
+                                Nombre *
+                            </label>
+                            <input type="text" class="form-control" formControlName="name" id="form-name" placeholder="Ingresa tu nombre" maxlength="45">
+                            @if (name.invalid && (name.dirty || name.touched)) {
+                                <div class="alert alert-danger">
+                                    @if (name.hasError('required')) {
+                                        <span>Completa el campo con tu nombre</span>
+                                    }
+                                    @if (name.hasError('pattern')) {
+                                        <span>No es un nombre válido (solo letras)</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        <!-- surname -->
+                        <div class="mb-3">
+                            <label for="form-surname" class="form-label">
+                                Apellido *
+                            </label>
+                            <input type="text" class="form-control" formControlName="surname" id="form-surname" placeholder="Ingresa tu apellido" maxlength="45">
+                            @if (surname.invalid && (surname.dirty || surname.touched)) {
+                                <div class="alert alert-danger">
+                                    @if (surname.hasError('required')) {
+                                        <span>Completa el campo con tu apellido</span>
+                                    }
+                                    @if (surname.hasError('pattern')) {
+                                        <span>No es un apellido válido (solo letras)</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        <!-- age -->
+                        <div class="mb-3">
+                            <label for="form-age" class="form-label">
+                                Edad *
+                            </label>
+                            <input type="number" class="form-control" formControlName="age" id="form-age" placeholder="Tu edad" min="19" max="98">
+                            @if (age.invalid && (age.dirty || age.touched)) {
+                                <div class="alert alert-danger">
+                                    @if (age.hasError('required')) {
+                                        <span>La edad es obligatoria.</span>
+                                    }
+                                    @if (age.hasError('min') || age.hasError('max')) {
+                                        <span>La edad debe ser mayor a 18 años y menor a 99 años.</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        <!-- telephone -->
+                        <div class="mb-3">
+                            <label for="form-telephone" class="form-label">
+                                Telefono *
+                            </label>
+                            <input type="text" class="form-control" formControlName="telephone" id="form-telephone" placeholder="Tu telefono" minlength="10" maxlength="10" inputmode="numeric">
+                            @if (telephone.invalid && (telephone.dirty || telephone.touched)) {
+                                <div class="alert alert-danger">
+                                        @if (telephone.hasError('required')) {
+                                            <span>El telefono es obligatorio.</span>
+                                        }
+                                        @if (telephone.hasError('minlength')) {
+                                            <span>El telefono debe contener 10 numeros.</span>
+                                        }
+                                        @if (telephone.hasError('maxlength')) {
+                                            <span>El telefono debe contener 10 numeros.</span>
+                                        }
+                                </div>
+                            }
+                        </div>
+
+                        <!-- game rating -->
+                        <div class="mb-3">
+                            <label class="form-label-radio-button">
+                                ¿Qué tan divertido te pareció el juego? *
+                            </label>               
+                            <div class="form-check-container">
+                                <div class="form-check">
+                                    <input class="form-check-input" formControlName="gameRating" id="form-game-rating-5" type="radio" name="gameRating" value="5">
+                                    <label class="form-check-label" for="form-game-rating-5">Muy divertido (5/5)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" formControlName="gameRating" id="form-game-rating-3" type="radio" name="gameRating" value="3">
+                                    <label class="form-check-label" for="form-game-rating-3">Neutral (3/5)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" formControlName="gameRating" id="form-game-rating-1" type="radio" name="gameRating" value="1">
+                                    <label class="form-check-label" for="form-game-rating-1">Aburrido (1/5)</label>
+                                </div>
+                            </div>
+                            @if (gameRating.invalid && gameRating.touched) {
+                                <div class="alert alert-danger mt-2">
+                                    <span>Selecciona una calificación.</span>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- recommendations -->
+                        <div class="mb-3">
+                            <label for="defaultCheck" class="form-label d-block">
+                                ¿Que fue lo que mas te gustó del juego? *
+                            </label>
+
+                            <div [formArrayName]="'gameAspects'">
+
+                                <div class="form-check">
+                                    <input class="form-check-input" formControlName="0" type="checkbox" id="id-difficult-checkbox">
+                                    <label class="form-check-label" for="id-difficult-checkbox">Dificultad</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" formControlName="1" type="checkbox" id="id-usability-checkbox">
+                                    <label class="form-check-label" for="id-usability-checkbox">Usabilidad</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" formControlName="2" type="checkbox" id="id-design-checkbox">
+                                    <label class="form-check-label" for="id-design-checkbox">Diseño</label>
+                                </div>
+                            </div>
+
+                            @if (gameAspects.invalid && (gameAspects.dirty || gameAspects.touched)) {
+                                <div class="alert alert-danger mt-2">
+                                    @if (gameAspects.hasError('minSelection')) {
+                                        <span>Selecciona al menos una opción.</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        <!-- comments -->
+                        <div class="mb-4">
+                            <label for="comments" class="form-label">
+                                ¿Cuál es el aspecto del juego que necesita la mejora más urgente? *
+                            </label>
+                            <textarea class="form-control" formControlName="comments" id="comments" rows="3" placeholder="Escribe tus comentarios aquí..." minlength="10" maxlength="150"></textarea>
+
+                            @if (comments.invalid && (comments.dirty || comments.touched)) {
+                                <div class="alert alert-danger mt-2">
+                                    @if (comments.hasError('required')) {
+                                        <span>Este campo es obligatorio.</span>
+                                    }
+                                    @if (comments.hasError('minlength')) {
+                                        <span>La sugerencia debe tener al menos 10 caracteres.</span>
+                                    }
+                                    @if (comments.hasError('maxlength')) {
+                                        <span>Solo se permiten escribir un maximo de 150 caracteres.</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        
+                        <!-- footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary"(click)="onClose()">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" [disabled]="surveyForm.invalid || loading">
+                                @if (loading) {
+                                    <span>Enviando...</span>
+                                }
+                                @else {
+                                    <span>Enviar Encuesta</span>
+                                }
+                            </button>
+                        </div>     
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}

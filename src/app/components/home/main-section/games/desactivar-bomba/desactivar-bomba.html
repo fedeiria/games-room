@@ -68,9 +68,9 @@
                     <div class="code-visual-display mb-2">
                         {{ this.inputValue === null ? '---' : this.inputValue }}
                     </div>
-                    <input class="input-code-overlay form-control form-control-lg text-center mb-3" type="tel"
-                        placeholder="Ingrese código (100-999)" [(ngModel)]="this.inputValue" min="100" max="999"
-                        maxlength="3" [disabled]="this.isCableCut || this.lastGuess === this.codeDeactivateBomb" />
+                    <input class="input-code-overlay form-control form-control-lg text-center mb-3" type="tel" placeholder="Ingrese código (100-999)"
+                        [(ngModel)]="this.inputValue" min="100" max="999" maxlength="3"
+                        [disabled]="this.isCableCut || this.lastGuess === this.codeDeactivateBomb" />
                     <button class="btn btn-warning mt-3 me-2" (click)="this.useHint()"
                         [disabled]="this.hintUsed || this.isCableCut || this.lastGuess === this.codeDeactivateBomb">
                         Usar Pista (1er Dígito)
@@ -85,3 +85,6 @@
         </div>
     </div>
 </section>
+
+<!-- survey component -->
+ <app-survey />

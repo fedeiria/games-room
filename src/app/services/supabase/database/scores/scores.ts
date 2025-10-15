@@ -20,6 +20,20 @@ export class Scores {
     this.supabaseClient = createSupabaseClientConnection();
   }
 
+  async getScoresPerUser(userId: string): Promise<any> {
+    const { data, error } = await this.supabaseClient
+    .from('scores')
+    .select('*, games(name)')
+    .eq('user_id', userId);
+
+    if (error) {
+      console.error('[scores service] error al obtener los datos: ', error);
+      throw new Error('Error al obtener las estadisticas del usuario');
+    }
+
+    return data;
+  }
+
   async setScore({ gameId, score, victory }: IScoreInsert): Promise<void> {
     const { data: userData, error: userError } = await this.supabaseClient.auth.getUser();
 

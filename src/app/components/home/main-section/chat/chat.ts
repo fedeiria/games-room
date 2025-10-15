@@ -47,7 +47,7 @@ export class Chat implements OnDestroy, OnInit {
     });
   }
 
-  // envio el mensaje al chat
+  // envia el mensaje al chat
   public async sendMessage(): Promise<void> {
     if (this.newMessage.trim()) {
       await this.chatRoom.sendMessage(this.newMessage.trim());
@@ -78,7 +78,7 @@ export class Chat implements OnDestroy, OnInit {
     }
   }
 
-  // submit del form
+  // submit del form al enviar el mensaje
   public onSubmit(event: Event): void {
     event.preventDefault();
     this.sendMessage();

@@ -1,5 +1,5 @@
 <section class="ahorcado-container">
-    <button class="btn btn-primary" (click)="backToHome()">Volver</button>
+    <button class="btn btn-primary" (click)="this.backToHome()">Volver</button>
     <div class="container game-container">
         <div class="col">
             <img
@@ -13,7 +13,7 @@
                 <div class="row word-guess">
                     <div class="col-md-12 text-center">
                         <div class="d-inline">
-                            @for (hyphen of hyphenatedWord; track $index) {
+                            @for (hyphen of this.hyphenatedWord; track $index) {
                                 <h1 class="d-inline p-2">{{hyphen}}</h1>
                             }
                         </div>
@@ -40,6 +40,11 @@
     </div>
     @if (!this.activeGame) {
         <h3 class="selected-game-word">Palabra del juego: {{this.word}}</h3>
-        <button class="btn-restart" (click)="this.restartGame()">{{this.restartButtonText}}</button>
+        <button class="btn-restart" (click)="this.restartGame()">
+            {{this.restartButtonText}}
+        </button>
     }
 </section>
+
+<!--survey component-->
+<app-survey />

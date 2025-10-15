@@ -8,8 +8,6 @@ import { Auth } from '../../../services/supabase/auth/auth';
 import { Dialogs } from '../../../services/messages/dialogs';
 import { Validations } from '../../../services/validations/validations';
 import { Logins } from '../../../services/supabase/database/logins/logins';
-import { Users } from '../../../services/users/users';
-import { filter, firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +24,7 @@ export class Login implements OnInit {
     password: FormControl<string>;
   }>;
 
-  constructor(private auth: Auth, private dialog: Dialogs, private formBuilder: NonNullableFormBuilder, private logins: Logins, private router: Router, private users: Users, private validations: Validations) { }
+  constructor(private auth: Auth, private dialog: Dialogs, private formBuilder: NonNullableFormBuilder, private logins: Logins, private router: Router, private validations: Validations) { }
   
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group(
@@ -62,23 +60,22 @@ export class Login implements OnInit {
       
       // si el usuario esta registrado guardo el timestamp del login en supabase y redirijo al home
       if (data.user) {
+        const userDetails = await this.auth.currentUserDetails;
 
-        // convierto un observable en una promesa
-        await firstValueFrom(
-          this.users.currentUser$.pipe(
-            filter(user => user !== null)
-          )
-        );
-
-        this.logins.saveLoginTimestamp(data.user.id);
-        this.router.navigate(['/home']);
+        if (userDetails.data.user){
+          await this.logins.saveLoginTimestamp(userDetails.data.user.id);
+          this.router.navigate(['/home']);
+        }
+        else {
+          throw new Error('Error al obtener el usuario despues del login.');
+        }
       }
-      // si el usuario no esta registrado...
+      // si el usuario no esta registrado o las credenciales son incorrectas...
       else {
-        console.error('[login service] error:', error);
+        this.loading = false;
         
         // muestro mensaje de error al usuario
-        this.dialog.showDialogMessage({
+        await this.dialog.showDialogMessage({
           title: 'Games Room',
           content: 'Error de Usuario / Contraseña. Verifica tus datos.'
         });
@@ -91,7 +88,7 @@ export class Login implements OnInit {
       // mensaje por defecto
       let message = 'Ocurrio un error inesperado.';
       
-      this.dialog.showDialogMessage({
+      await this.dialog.showDialogMessage({
         title: 'Games Room',
         content: `${message}`
       });

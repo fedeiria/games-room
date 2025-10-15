@@ -6,7 +6,7 @@ import { IDialog } from '../../../../interfaces/dialog/idialog';
 
 @Component({
   selector: 'app-dialog',
-  imports: [ MatButtonModule, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle ],
+  imports: [MatButtonModule, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle],
   templateUrl: './dialog.html',
   styleUrl: './dialog.scss'
 })

@@ -1,7 +1,35 @@
-body {
-    background-color: rgba(33, 34, 51, 0.9) !important;
+.about-card {
+    background-color: #f8f9fa;
+    padding: 30px !important;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
-.mt-5 {
-    margin-top: 6rem !important;
+.about-card p {
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+.btn-dark {
+    padding: 10px 25px;
+    font-size: 1.05rem;
+    border-radius: 8px;
+    transition: background-color 0.3 ease;
+}
+
+.btn-dark:hover {
+    background-color: #212233e6 !important;
+    border-color: #212233e6 !important;
+}
+
+.main-container {
+    background-color: #212233e6 !important;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    box-sizing: border-box;
 }

@@ -11,11 +11,11 @@ import { createSupabaseClientConnection } from '../../../../core/supabase/client
 })
 export class ChatRoom implements OnDestroy {
 
-  private limitRows: number = 50;
+  private limitRows: number = 200;
 
   private readonly supabaseClient: SupabaseClient = createSupabaseClientConnection();
 
-  // lista de mensajes para el componente
+  // observable para los mensajes
   private readonly messagesSubject = new BehaviorSubject<IChatMessage[]>([]);
   public readonly observableMessages$: Observable<IChatMessage[]> = this.messagesSubject.asObservable();
 
@@ -34,7 +34,7 @@ export class ChatRoom implements OnDestroy {
     const { data, error } = await this.supabaseClient
       .from('chat_room')
       .select('*')
-      .order('created_at', { ascending: true })
+      .order('created_at', { ascending: false })
       .limit(this.limitRows);
 
       if (error) {
@@ -43,7 +43,8 @@ export class ChatRoom implements OnDestroy {
       }
 
       if (data) {
-        this.messagesSubject.next(data as IChatMessage[]);
+        const sortedData = data.reverse();
+        this.messagesSubject.next(sortedData as IChatMessage[]);
       }
   }
 
@@ -73,7 +74,7 @@ export class ChatRoom implements OnDestroy {
       });
   }
 
-  // guardo el mensaje en la tabla chat_room
+  // guarda el mensaje en la tabla chat_room
   public async sendMessage(content: string) {
     const currentUser = await this.auth.currentUserDetails;
 

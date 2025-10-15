@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { ApiPreguntados } from '../../../../../services/preguntados/api-preguntados';
 import { Scores } from '../../../../../services/supabase/database/scores/scores';
 import { Dialogs } from '../../../../../services/messages/dialogs';
-import { Subscription } from 'rxjs';
+import { Survey } from '../../../../../services/modals/survey/survey';
+import { GameId } from '../../../../../enums/game-id';
 
 interface ICountryData {
   name: string;
@@ -27,6 +29,8 @@ interface IQuestion {
 })
 export class Preguntados implements OnDestroy, OnInit {
 
+  private gameId: GameId = GameId.TriviaPaises;
+
   private arrayApi: ICountryData[] = [];
   private questionList: IQuestion[] = [];
 
@@ -41,9 +45,9 @@ export class Preguntados implements OnDestroy, OnInit {
   public restartButtonText: string = 'Reiniciar Juego';
   public gameCover: string = '../../../../../assets/images/game-cover/preguntados.png';
 
-  apiSubscription: Subscription | undefined;
+  private apiSubscription: Subscription | undefined;
 
-  constructor(private dialogs: Dialogs, private apiPreguntados: ApiPreguntados, private router: Router, private scores: Scores) { }
+  constructor(private dialogs: Dialogs, private apiPreguntados: ApiPreguntados, private router: Router, private scores: Scores, private surveyService: Survey) { }
 
   ngOnInit(): void {
     this.getApiData();
@@ -147,10 +151,11 @@ export class Preguntados implements OnDestroy, OnInit {
     }
   }
 
-  // llama al metodo saveResultData y finaliza el juego
+  // finalizo el juego, llamo al metodo saveResultData y muestro la encuesta
   private endGame(): void {
-    this.saveResultData();
     this.gameOver = true;
+    this.saveResultData();
+    this.surveyService.showSurveyModal(this.gameId);
   }
 
   // guarda el resultado de la partida
@@ -178,8 +183,6 @@ export class Preguntados implements OnDestroy, OnInit {
 
   // seek and destroy!
   ngOnDestroy(): void {
-    if (this.apiSubscription) {
-      this.apiSubscription?.unsubscribe();
-    }
+    this.apiSubscription?.unsubscribe();
   }
 }

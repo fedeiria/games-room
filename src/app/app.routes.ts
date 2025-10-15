@@ -37,12 +37,19 @@ export const routes: Routes = [
         loadComponent: () => import('./components/home/home').then(c => c.Home),
         canActivate:[authGuard]
     },
-    // load module: gamesModule
+    {
+        path: 'stats',
+        title: 'Estadisticas',
+        loadComponent: () => import('./components/home/main-section/stats/stats').then(c => c.Stats),
+        canActivate:[authGuard]
+    },
+
+    // load modules: gamesModule
     {
         path: 'games',
         title: 'Juegos',
         loadChildren: () => import('./modules/games/games-module').then(m => m.GamesModule),
-        canActivate:[authGuard]
+        canMatch:[authGuard]
     },
 
     // page not found (404)

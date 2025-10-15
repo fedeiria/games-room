@@ -15,7 +15,7 @@
             <div class="answer-container">
                 @if (!this.gameOver) {
                     @if (this.currentQuestion) {
-                        <h3>¿De qué país es la bandera?</h3>
+                        <h3>¿A qué país pertenece la bandera?</h3>
                         <div class="flag-container">
                             <img src="{{this.currentQuestion.flag}}" alt="bandera a adivinar" />
                         </div>
@@ -51,3 +51,6 @@
         </div>
     </div>
 </section>
+
+<!-- survey component -->
+ <app-survey />

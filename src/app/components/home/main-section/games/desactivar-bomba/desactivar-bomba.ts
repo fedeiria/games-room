@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 
 import { Dialogs } from '../../../../../services/messages/dialogs';
 import { Scores } from '../../../../../services/supabase/database/scores/scores';
+import { Survey } from '../../../../../services/modals/survey/survey';
+import { GameId } from '../../../../../enums/game-id';
 
 @Component({
   selector: 'app-desactivar-bomba',
@@ -12,9 +14,8 @@ import { Scores } from '../../../../../services/supabase/database/scores/scores'
 })
 export class DesactivarBomba {
 
-  private interval: any;
-
-  public hyphenatedWord: string[] = []
+  private gameId: GameId = GameId.DesactivarBomba;
+  private interval: NodeJS.Timeout | undefined;
 
   public attempts: number = 0;
   public inputValue: number | null = null;
@@ -23,6 +24,7 @@ export class DesactivarBomba {
   public timeRemaining: number = 0;
   public codeDeactivateBomb: number = 0;
 
+  public hyphenatedWord: string[] = []
   public cableColors: string[] = ['red', 'green', 'blue'];
   public correctCable: string = '';
   public selectedCable: string | null = null;
@@ -46,7 +48,7 @@ export class DesactivarBomba {
   private resultMessageLost: string = '¡LA BOMBA HA EXPLOTADO!';
   public gameCover: string = '../../../../../assets/images/game-cover/bomba.png';
 
-  constructor(private dialogs: Dialogs, private router: Router, private scores: Scores) { }
+  constructor(private dialogs: Dialogs, private router: Router, private scores: Scores, private surveyServices: Survey) { }
 
   // contador de tiempo
   private startTimer(): void {
@@ -120,6 +122,7 @@ export class DesactivarBomba {
     }
 
     this.saveResultData();
+    this.surveyServices.showSurveyModal(this.gameId);
   }
 
   // inicializa valores

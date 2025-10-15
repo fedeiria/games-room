@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Auth } from '../../services/supabase/auth/auth';
 import { take } from 'rxjs';
+
+import { Auth } from '../../services/supabase/auth/auth';
 
 @Component({
   selector: 'app-about',

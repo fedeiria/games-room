@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 
 import { Scores } from '../../../../../services/supabase/database/scores/scores';
 import { Dialogs } from '../../../../../services/messages/dialogs';
+import { Survey } from '../../../../../services/modals/survey/survey';
+import { GameId } from '../../../../../enums/game-id';
 
 @Component({
   selector: 'app-ahorcado',
@@ -11,6 +13,8 @@ import { Dialogs } from '../../../../../services/messages/dialogs';
   styleUrl: './ahorcado.scss'
 })
 export class Ahorcado implements OnInit {
+
+  private gameId: GameId = GameId.Ahorcado;
 
   public word: string = '';
   public attempts: number = 6;
@@ -86,7 +90,7 @@ export class Ahorcado implements OnInit {
     '../../../../../assets/images/games/ahorcado/ahorcado_6.jpg'  // 6 errores (pierna derecha - DERROTA!)
   ] 
   
-  constructor(private cdr: ChangeDetectorRef, private dialogs: Dialogs, private router: Router, private scores: Scores) {}
+  constructor(private cdr: ChangeDetectorRef, private dialogs: Dialogs, private router: Router, private scores: Scores, private survey: Survey) {}
   
   ngOnInit(): void {
     this.word = this.wordList[Math.round(Math.random() * (this.wordList.length - 1))];
@@ -109,7 +113,7 @@ export class Ahorcado implements OnInit {
     return this.disabledLetters.includes(letter);
   }
 
-  public sendLetter(letter: string): void {
+  public async sendLetter(letter: string): Promise<void> {
     let winGame: boolean = false;
     let letterFlag: boolean = false;
 
@@ -139,12 +143,16 @@ export class Ahorcado implements OnInit {
             this.activeGame = false;
             this.victory = true;
 
-            this.dialogs.showDialogMessage({
+            await this.dialogs.showDialogMessage({
               title: 'Games Room',
               content: '¡FELICITACIONES! ¡GANASTE!'
             });
 
+            // guardo los datos de la partida
             this.saveResultData();
+
+            // llamo al formulario de encuesta
+            this.survey.showSurveyModal(this.gameId);
             break;
           }
         }
@@ -168,13 +176,14 @@ export class Ahorcado implements OnInit {
           if (this.attempts === 0) {
             this.activeGame = false;
 
-            this.dialogs.showDialogMessage({
+            await this.dialogs.showDialogMessage({
               title: 'Games Room',
               content: '¡PERDISTE! la palabra oculta era ' + this.word
             });
 
             this.failedAttemps = this.maxAttempts - this.attempts;
             this.saveResultData();
+            this.survey.showSurveyModal(this.gameId);
           }
         }
       }
@@ -185,7 +194,7 @@ export class Ahorcado implements OnInit {
   private async saveResultData(): Promise<void> {
     try {
       await this.scores.setScore({
-        gameId: 1,
+        gameId: this.gameId,
         victory: this.victory
       });
     }
@@ -199,7 +208,7 @@ export class Ahorcado implements OnInit {
     }
   }
   
-  public backToHome(): void {
+  public async backToHome(): Promise<void> {
     this.router.navigate(['/home']);
   }
 }

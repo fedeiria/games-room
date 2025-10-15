@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserResponse } from '@supabase/supabase-js';
 
 import { Dialogs } from '../../../../../services/messages/dialogs';
 import { Scores } from '../../../../../services/supabase/database/scores/scores';
 import { IMayorMenorCards } from '../../../../../interfaces/games/mayor-menor/imayor-menor-cards';
+import { Survey } from '../../../../../services/modals/survey/survey';
+import { GameId } from '../../../../../enums/game-id';
 
 @Component({
   selector: 'app-mayor-menor',
@@ -14,8 +15,8 @@ import { IMayorMenorCards } from '../../../../../interfaces/games/mayor-menor/im
 })
 export class MayorMenor {
 
-  userDetails!: UserResponse;
-
+  private gameId: GameId = GameId.MayorMenor;
+  
   private cardsToGuess: IMayorMenorCards[] = [];
   
   public score: number = 0;
@@ -94,7 +95,7 @@ export class MayorMenor {
     { type: 'diamonds', number: 13 }
   ];
 
-  constructor(private dialogs: Dialogs, private router: Router, private scores: Scores) { }
+  constructor(private dialogs: Dialogs, private router: Router, private scores: Scores, private surveyService: Survey) { }
 
   // inicializa el juego
   public startGame(): void {
@@ -181,9 +182,13 @@ export class MayorMenor {
   // corroboro si el juego ha finalizado por intentos agotados o total de cartas jugadas 
   private chechEndGame(): void {
     if (this.attempts == 0 || this.currentIndex >= this.cardsToGuess.length - 1) {
+      this.activeGame = false;
+      this.gameOver = true;
+      
       setTimeout(() => {
-        this.activeGame = false;
-        this.gameOver = true;
+        // muestro la encuesta
+        this.surveyService.showSurveyModal(this.gameId);
+
         this.saveResultData();
         this.cardImage = '../../../../../assets/images/games/mayor-menor/back-side-poker-card.png';
         this.rightCardImage = '../../../../../assets/images/games/mayor-menor/back-side-poker-card.png';
@@ -199,6 +204,7 @@ export class MayorMenor {
     }, 2000);
   }
 
+  // guardo los datos de la partida
   private async saveResultData(): Promise<void> {
     try {
       await this.scores.setScore({

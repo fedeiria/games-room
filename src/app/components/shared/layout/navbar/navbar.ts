@@ -1,49 +1,28 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+  import { Component } from '@angular/core';
+  import { Router, RouterLink } from '@angular/router';
+  import { Observable } from 'rxjs';
+  import { CommonModule } from '@angular/common';
 
-import { UserRole } from '../../../../enums/user-role.enum';
-import { Auth } from '../../../../services/supabase/auth/auth';
-import { IUser } from '../../../../interfaces/user/iuser';
-import { Users } from '../../../../services/users/users';
-import { Subscription } from 'rxjs';
+  import { UserRole } from '../../../../enums/user-role';
+  import { Auth, IAuthDetails } from '../../../../services/supabase/auth/auth';
 
-@Component({
-  selector: 'app-navbar',
-  imports: [RouterLink],
-  templateUrl: './navbar.html',
-  styleUrl: './navbar.scss'
-})
-export class Navbar implements OnDestroy, OnInit {
+  @Component({
+    selector: 'app-navbar',
+    imports: [CommonModule, RouterLink],
+    templateUrl: './navbar.html',
+    styleUrl: './navbar.scss'
+  })
+  export class Navbar {
 
-  user: IUser | null = null;
-  UserRole = UserRole;
-  authState: UserRole = UserRole.Guess;
-  private subscriptions: Subscription = new Subscription();
+    public UserRole = UserRole;
+    public authState$: Observable<IAuthDetails>;
 
-  constructor(private auth: Auth, private users: Users, private router: Router) { }
+    constructor(private auth: Auth, private router: Router) {
+      this.authState$ = this.auth.observableAuthState$ as Observable<IAuthDetails>;
+    }
 
-  ngOnInit(): void {
-    this.subscriptions.add(
-        this.users.userRole$.subscribe(role => {
-        this.authState = role;
-      })
-    );
-    
-    this.subscriptions.add(
-      this.users.currentUser$.subscribe(user => {
-        this.user = user;
-      })
-    );
+    public signOut(): void {
+      this.auth.signOut();
+      this.router.navigate(['/login']);
+    }
   }
-
-  public signOut(): void {
-    this.auth.signOut();
-    this.router.navigate(['/login']);
-    this.user = null;
-    this.authState = UserRole.Guess;
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
-}

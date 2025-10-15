@@ -1,0 +1,7 @@
+:host {
+    flex-grow: 1; // Permite que el contenido principal crezca para llenar el espacio
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

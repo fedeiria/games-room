@@ -7,13 +7,15 @@ import { Ahorcado } from '../../components/home/main-section/games/ahorcado/ahor
 import { MayorMenor } from '../../components/home/main-section/games/mayor-menor/mayor-menor';
 import { Preguntados } from '../../components/home/main-section/games/preguntados/preguntados';
 import { DesactivarBomba } from '../../components/home/main-section/games/desactivar-bomba/desactivar-bomba';
+import { Survey } from "../../components/home/main-section/survey/survey";
 
 @NgModule({
   declarations: [Ahorcado, MayorMenor, Preguntados, DesactivarBomba],
   imports: [
     CommonModule,
     FormsModule,
-    GamesRoutingModule
-  ]
+    GamesRoutingModule,
+    Survey
+]
 })
 export class GamesModule { }
