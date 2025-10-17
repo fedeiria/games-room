@@ -6,7 +6,7 @@ import { createSupabaseClientConnection } from '../../../../core/supabase/client
 @Injectable({
   providedIn: 'root'
 })
-export class Logins {
+export class Surveys {
   
   private readonly supabaseClient: SupabaseClient;
 
@@ -14,14 +14,16 @@ export class Logins {
     this.supabaseClient = createSupabaseClientConnection();
   }
 
-  // guarda el registro de conexion del usuario
-  public async saveLoginTimestamp(user_id: string): Promise<void> {
-    const { error } = await this.supabaseClient
-      .from('logins')
-      .insert({ user_id: user_id, created_at: new Date() });
+  public async getAllSurveys(): Promise<any> {
+    const { data, error } = await this.supabaseClient
+    .from('surveys')
+    .select('*, games(name)')
+    .order('created_at', { ascending: false });
 
     if (error) {
-      console.log('database error: ', error);
+      throw new Error('[surveys service]: Error al obtener los datos de las encuestas');
     }
+    
+    return data.reverse();
   }
 }

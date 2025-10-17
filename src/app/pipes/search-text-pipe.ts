@@ -12,32 +12,23 @@ export class SearchTextPipe implements PipeTransform {
 
     searchText = searchText.toLowerCase().trim();
 
-    return items.filter((score) => {
-      // filtro por nombre de juego
-      const gameName = score.games?.name?.toLowerCase() || '';
-      if (gameName.includes(searchText)) {
-        return true;
-      }
+    //obtengo todos los valores del objeto item y mapeo cada valor a una cadena de texto a minusculas
+    return items.filter((item) => {
+      const searchString = Object.values(item)
+        .map(value => {
+          if (value ===  null || typeof value === 'undefined') {
+            return '';
+          }
+          if (typeof value === 'object') {
+            return Object.values(value).join(' ');
+          }
+          return String(value);
+        })
+        .join(' ')
+        .toLowerCase();
 
-      // filtro por puntuacion
-      const scoreValue = String(score.score || 0).toLowerCase();
-      if (scoreValue.includes(searchText)) {
-        return true;
-      }
-
-      // filtro por resultado (Victoria/Derrota)
-      const victoryText = (score.victory ? 'victoria' : 'derrota');
-      if (victoryText.includes(searchText)) {
-        return true;
-      }
-
-      // filtro por fecha
-      const dateText = String(score.created_at).toLowerCase();
-      if (dateText.includes(searchText)) {
-        return true;
-      }
-
-      return false;
+      // verifico si la cadena de busqueda esta incluida en la cadena combinada del item 
+      return searchString.includes(searchText);
     });
   }
 }

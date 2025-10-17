@@ -20,7 +20,7 @@ export class Scores {
     this.supabaseClient = createSupabaseClientConnection();
   }
 
-  async getScoresPerUser(userId: string): Promise<any> {
+  public async getScoresPerUser(userId: string): Promise<any> {
     const { data, error } = await this.supabaseClient
     .from('scores')
     .select('*, games(name)')
@@ -34,7 +34,7 @@ export class Scores {
     return data;
   }
 
-  async setScore({ gameId, score, victory }: IScoreInsert): Promise<void> {
+  public async setScore({ gameId, score, victory }: IScoreInsert): Promise<void> {
     const { data: userData, error: userError } = await this.supabaseClient.auth.getUser();
 
     if (userError || !userData?.user) {

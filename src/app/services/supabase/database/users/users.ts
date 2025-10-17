@@ -16,7 +16,7 @@ export class Users {
   }
 
   // inserta un nuevo usuario en 'users'
-    async saveNewUser(newUser: IUser): Promise<void> {
+    public async saveNewUser(newUser: IUser): Promise<void> {
       const { error } = await this.supabaseClient.from('users').insert({ id: newUser.id, name: newUser.name, surname: newUser.surname, email: newUser.email, role_id: newUser.roleId, created_at: new Date() });
       
       if (error) {
@@ -25,7 +25,7 @@ export class Users {
     }
 
   // obtiene los datos de un usuario
-  async getUserData(userId: string | undefined): Promise<any[] | null> {
+  public async getUserData(userId: string | undefined): Promise<any[] | null> {
     const { data, error } = await this.supabaseClient.from('users').select().eq('id', userId);
 
     if (error) {

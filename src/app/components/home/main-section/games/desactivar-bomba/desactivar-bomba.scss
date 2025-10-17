@@ -8,7 +8,7 @@
     min-height: 100vh;
     padding: 20px;
     font-family: "Poppins", sans-serif;
-    background-color: #222; /* Fondo oscuro para el tema de bomba */
+    background-color: #222;
     color: #eee;
 }
 
@@ -39,12 +39,12 @@
 /* ======================= TEMPORIZADOR Y CONTADORES =========================== */
 
 .time-remaining {
-    font-family: 'Digital-Display-Font', monospace; /* Usa una fuente de display digital si tienes una */
-    font-size: 3.5em; /* Tamaño más grande para impacto */
+    font-family: 'Digital-Display-Font', monospace;
+    font-size: 3.5em;
     font-weight: bold;
-    color: #0f0; /* Color LED verde */
-    text-shadow: 0 0 7px #0f0, 0 0 10px #0f0; /* Efecto de brillo */
-    background-color: #111; /* Fondo oscuro detrás del número */
+    color: #0f0;
+    text-shadow: 0 0 7px #0f0, 0 0 10px #0f0;
+    background-color: #111;
     padding: 5px 15px;
     border-radius: 5px;
     margin-top: 0;
@@ -53,7 +53,7 @@
 }
 
 .time-remaining.text-danger {
-    color: #ff0000; /* Rojo si quedan pocos segundos */
+    color: #ff0000;
     text-shadow: 0 0 7px #ff0000, 0 0 10px #ff0000;
 }
 
@@ -77,6 +77,78 @@
 
 /* ======================== CONTROLES NUMÉRICOS Y PISTA =========================== */
 
+.code-visual-display {
+    font-size: 3rem;
+    font-family: monospace;
+    letter-spacing: 0.5rem;
+    color: var(--bs-light);
+    background-color: #2b2b2b;
+    border: 2px solid #555;
+    padding: 10px 20px;
+    border-radius: 8px;
+    min-height: 60px;
+    display: inline-block;
+    
+    .digit, .digit-placeholder {
+        margin: 0 5px;
+        display: inline-block;
+        min-width: 0.8em;
+        text-align: center;
+    }
+}
+
+// Estilos para el Teclado Numérico
+.numeric-keyboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 300px;
+    margin: 20px auto 0;
+}
+
+.key-button {
+    background-color: #4a4a4a;
+    color: white;
+    border: none;
+    padding: 15px 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+
+    &:hover:not(:disabled) {
+        background-color: #6a6a6a;
+    }
+
+    &:active:not(:disabled) {
+        background-color: #8a8a8a;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+}
+
+.delete-key {
+    grid-column: 2 / span 1; 
+    background-color: #d11a2a;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); 
+    
+    &:hover:not(:disabled) {
+        background-color: #ff3344;
+        box-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
+    }
+    
+    &:active:not(:disabled) {
+        background-color: #e54b5a;
+        transform: scale(0.98);
+    }
+}
+
 .code-entry-area {
     position: relative;
     width: 100%;
@@ -88,23 +160,7 @@
     z-index: 2;
 }
 
-.code-visual-display {
-    font-size: 2.5em;
-    font-weight: bold;
-    letter-spacing: 5px;
-    background-color: #333;
-    padding: 10px 20px;
-    border-radius: 5px;
-    color: #0f0; /* Color de pantalla digital */
-    margin-bottom: 15px;
-    min-height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .input-code-overlay {
-    // Propiedades de superposición
     position: absolute;
     opacity: 0;
     cursor: text;
@@ -113,8 +169,6 @@
     width: 100%;
     height: 100%;
     z-index: 1;
-    
-    // Propiedades de estilo para cuando está activo (aunque invisible)
     color: #414581e6;
     caret-color: black;
     background-color: transparent !important;
@@ -136,7 +190,7 @@
     display: flex;
     justify-content: center;
     margin-top: 20px;
-    gap: 15px; /* Espacio entre cables */
+    gap: 15px;
     border-radius: 10px;
 }
 
@@ -148,19 +202,19 @@
 }
 
 .cable-image {
-    width: 100px; /* Tamaño del cable */
+    width: 100px;
     height: auto;
 }
 
-/* Estado de HOVER: resalta el cable al pasar el mouse */
+/* resalta el cable al pasar el mouse */
 .cable-wrapper.hover-state {
     transform: scale(1.1);
-    box-shadow: 0 0 15px 5px rgba(255, 255, 0, 0.7); /* Efecto de brillo amarillo */
+    box-shadow: 0 0 15px 5px rgba(255, 255, 0, 0.7);
     opacity: 1;
 }
 
 .cable-wrapper.cut-state {
-    pointer-events: none; /* Deshabilita clics */
+    pointer-events: none;
     opacity: 0.5;
 }
 
@@ -230,5 +284,19 @@
     
     .cable-image {
         width: 80px;
+    }
+
+    .code-entry-area {
+        max-width: 90%;
+    }
+
+    .numeric-keyboard {
+        max-width: 250px;
+        gap: 8px;
+    }
+
+    .key-button {
+        font-size: 1.3rem;
+        padding: 12px 0;
     }
 }

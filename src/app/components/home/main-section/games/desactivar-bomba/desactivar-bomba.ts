@@ -24,6 +24,10 @@ export class DesactivarBomba {
   public timeRemaining: number = 0;
   public codeDeactivateBomb: number = 0;
 
+  public numericKeyboard: number[] = [
+    1,2,3,4,5,6,7,8,9,0
+  ];
+
   public hyphenatedWord: string[] = []
   public cableColors: string[] = ['red', 'green', 'blue'];
   public correctCable: string = '';
@@ -31,7 +35,6 @@ export class DesactivarBomba {
   public cutCable: string = '';
   public isCableCut: boolean = false;
 
-  public hintMessage: string = '';
   public hintUsed: boolean = false;
   public lastGuess: number | null = null;
 
@@ -144,12 +147,7 @@ export class DesactivarBomba {
     this.firstDigit = Math.floor(this.codeDeactivateBomb / 100);
 
     this.hintUsed = false;
-
-    // selecciono el cable correcto para desactivar la bomba
-    this.correctCable = this.cableColors[Math.floor(Math.random() * this.cableColors.length)];
-
-    // asigno las pistas
-    this.hintMessage = this.generateCableHint();
+    this.generateCableHint();
 
     this.hyphenatedWord = Array(3).fill('_');
     this.startButtonText = 'Reiniciar Juego';
@@ -157,24 +155,18 @@ export class DesactivarBomba {
     this.gameCover = '../../../../../assets/images/game-cover/bomba.png';
   }
 
-  // genero las pistas del cable
+  // genero las pistas para desactivar el cable
   private generateCableHint(): string {
-    const code = this.codeDeactivateBomb;
+    const randomIndex = Math.floor(Math.random() * this.cableColors.length);
 
-    if (code % 2 === 0) {
-      this.correctCable = 'red';
-      return `PISTA CABLE: El cable correcto está asociado a un código PAR.`;
-    }
-    else if (code < 400) {
-      this.correctCable = 'blue';
-      return `PISTA CABLE: El codigo es menor a 400.`;
-    }
-    else {
-      this.correctCable = 'green'
-      return `PISTA CABLE: El codigo correcto es IMPAR y MAYOR a 400.`;
-    }
+    this.correctCable = this.cableColors[randomIndex];
+
+    console.log('indice al azar: ', randomIndex, 'Cable correcto a cortar: ', this.correctCable);
+
+    return this.correctCable;
   }
 
+  // verifica si se utilizo la opcion del corte de cable
   public cutCableAttempt(): void {
     // solo permito un intento de corte de cable por partida
     if (!this.activeGame || this.isCableCut || this.selectedCable === null) return;
@@ -239,6 +231,33 @@ export class DesactivarBomba {
     const formattedSeconds = String(seconds).padStart(2, '0');
 
     return `${formattedMinutes}:${formattedSeconds}`;
+  }
+
+  // lee el numero ingresado por el usuario en el teclado
+  public pressKey(key: number | 'del'): void {
+    if (!this.activeGame || this.isCableCut || this.lastGuess === this.codeDeactivateBomb) {
+      return;
+    }
+
+    let currentValueString = (this.inputValue === null || this.inputValue === 0) ? '' : this.inputValue.toString();
+
+    // elimino el ultimo digito
+    if (key === 'del') {
+      currentValueString = currentValueString.slice(0, -1);
+    }
+    else {
+      if (currentValueString.length < 3) {
+        currentValueString += key.toString();
+      }
+    }
+
+    // actualizo el inputValue si el string esta vacio, establezco null o cero
+    if (currentValueString === '') {
+      this.inputValue = null;
+    }
+    else {
+      this.inputValue = parseInt(currentValueString, 10);
+    }
   }
 
   // guardo los datos de la partida

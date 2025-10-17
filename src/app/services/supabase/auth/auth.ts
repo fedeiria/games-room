@@ -35,12 +35,12 @@ export class Auth {
   }
 
   // registro
-  signUpNewUser(email: string, password: string): Promise<AuthResponse> {
+  public signUpNewUser(email: string, password: string): Promise<AuthResponse> {
     return this.supabaseClient.auth.signUp({ email, password });
   }
 
   // login
-  signInWithEmailAndPassword(email: string, password: string): Promise<AuthTokenResponsePassword> {
+  public signInWithEmailAndPassword(email: string, password: string): Promise<AuthTokenResponsePassword> {
     return this.supabaseClient.auth.signInWithPassword({ email, password });
   }
 
