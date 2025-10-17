@@ -11,15 +11,24 @@
         @switch (state.role) {
             @case (this.UserRole.Admin) {
                 <ul class="nav justify-content-center">
+                    <li><a routerLink="/home" class="nav-link px-2 text-white me-4">Inicio</a></li>
                     <li class="dropdown-hover">
                         <a class="nav-link px-2 text-white me-4">Dashboard Admin</a>
                         <ul class="dropdown-menu-custom">
                             <li><a routerLink="/survey-dashboard" class="dropdown-item">Encuestas</a></li>
-                            <li><a routerLink="/" class="dropdown-item">Usuarios</a></li>
-                            <li><a routerLink="/" class="dropdown-item">Configuracion</a></li>
+                            <li><a routerLink="/users" class="dropdown-item">Usuarios</a></li>
+                            <li><a routerLink="/settings" class="dropdown-item">Configuracion</a></li>
                         </ul>
                     </li>
-                    <li><a routerLink="/games" class="nav-link px-2 text-white me-4">Juegos</a></li>
+                    <li class="dropdown-hover">
+                        <a class="nav-link px-2 text-white me-4">Juegos</a>
+                        <ul class="dropdown-menu-custom">
+                            <li><a routerLink="/games/ahorcado" class="dropdown-item">Ahorcado</a></li>
+                            <li><a routerLink="/games/desactivar-bomba" class="dropdown-item">Desactivar la Bomba</a></li>
+                            <li><a routerLink="/games/mayor-menor" class="dropdown-item">Mayor o Menor</a></li>
+                            <li><a routerLink="/games/preguntados" class="dropdown-item">Trivia Paises</a></li>
+                        </ul>
+                    </li>
                     <li><a routerLink="/stats" class="nav-link px-2 text-white me-4">Estadisticas</a></li>
                     <li><a routerLink="/about" class="nav-link px-2 text-white me-2">Quien soy</a></li>
                 </ul>
@@ -27,7 +36,15 @@
             @case (this.UserRole.User) {
                 <ul class="nav justify-content-center">
                     <li><a routerLink="/home" class="nav-link px-2 text-white me-4">Inicio</a></li>
-                    <li><a routerLink="/games" class="nav-link px-2 text-white me-4">Juegos</a></li>
+                    <li class="dropdown-hover">
+                        <a class="nav-link px-2 text-white me-4">Juegos</a>
+                        <ul class="dropdown-menu-custom">
+                            <li><a routerLink="/games/ahorcado" class="dropdown-item">Ahorcado</a></li>
+                            <li><a routerLink="/games/desactivar-bomba" class="dropdown-item">Desactivar la Bomba</a></li>
+                            <li><a routerLink="/games/mayor-menor" class="dropdown-item">Mayor o Menor</a></li>
+                            <li><a routerLink="/games/preguntados" class="dropdown-item">Trivia Paises</a></li>
+                        </ul>
+                    </li>
                     <li><a routerLink="/stats" class="nav-link px-2 text-white me-4">Estadisticas</a></li>
                     <li><a routerLink="/about" class="nav-link px-2 text-white me-2">Quien soy</a></li>
                 </ul>

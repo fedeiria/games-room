@@ -2,7 +2,7 @@
 
 <div class="container mb-4">
     <!-- search-form -->
-    @if (this.loading) {
+    @if (!this.loading) {
         <div>
             <form class="d-flex" role="search">
                 <input name="search" [(ngModel)]="this.searchText" class="form-control me-2" type="search" placeholder="Filtrar..." aria-label="Search"/>
@@ -32,7 +32,7 @@
                         <td>{{ score.games.name }}</td>
                         <td>{{ score.score ? score.score : 0 }}</td>
                         <td>{{ score.victory ? 'Victoria' : 'Derrota' }}</td>
-                        <td>{{ score.created_at | date:'medium' }}</td>
+                        <td>{{ score.created_at | date:'short' }}</td>
                     </tr>
                 }
                 @empty {

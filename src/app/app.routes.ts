@@ -49,7 +49,19 @@ export const routes: Routes = [
         path: 'survey-dashboard',
         title: 'Encuestas',
         loadComponent: () => import('./components/admin/surveyDashboard/survey-dashboard').then(c => c.SurveyDashboard),
-        canActivate:[authGuard],
+        canActivate:[authGuard]
+    },
+    {
+        path: 'users',
+        title: 'Usuarios',
+        loadComponent: () => import('./components/admin/users/users').then(c => c.Users),
+        canActivate:[authGuard]
+    },
+    {
+        path: 'settings',
+        title: 'Configuracion',
+        loadComponent: () => import('./components/admin/settings/settings').then(c => c.Settings),
+        canActivate:[authGuard]
     },
 
     // load modules: gamesModule
