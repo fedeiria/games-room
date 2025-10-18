@@ -18,7 +18,7 @@ export class Surveys {
     const { data, error } = await this.supabaseClient
     .from('surveys')
     .select('*, games(name)')
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: true });
 
     if (error) {
       throw new Error('[surveys service]: Error al obtener los datos de las encuestas');

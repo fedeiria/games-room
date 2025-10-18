@@ -32,7 +32,7 @@
                         <td>{{ score.games.name }}</td>
                         <td>{{ score.score ? score.score : 0 }}</td>
                         <td>{{ score.victory ? 'Victoria' : 'Derrota' }}</td>
-                        <td>{{ score.created_at | date:'short' }}</td>
+                        <td>{{ score.created_at | date:'dd/MM/yyyy HH:mm' }}</td>
                     </tr>
                 }
                 @empty {

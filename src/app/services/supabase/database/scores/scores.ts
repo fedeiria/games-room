@@ -24,14 +24,15 @@ export class Scores {
     const { data, error } = await this.supabaseClient
     .from('scores')
     .select('*, games(name)')
-    .eq('user_id', userId);
+    .eq('user_id', userId)
+    .order('created_at', { ascending: true });
 
     if (error) {
       console.error('[scores service] error al obtener los datos: ', error);
       throw new Error('Error al obtener las estadisticas del usuario');
     }
 
-    return data;
+    return data.reverse();
   }
 
   public async setScore({ gameId, score, victory }: IScoreInsert): Promise<void> {
